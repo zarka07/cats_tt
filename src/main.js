@@ -1,6 +1,15 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router';
+import { createPinia } from 'pinia';
+import axios from 'axios';
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap/dist/js/bootstrap.js";
 
-createApp(App).use(store).use(router).mount('#app')
+const axiosInstance = axios.create({
+    withCredentials: true,
+  })
+  const app = createApp(App)
+  app.config.globalProperties.$axios = { ...axiosInstance }
+
+app.use(router).use(createPinia()).mount('#app')
