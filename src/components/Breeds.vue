@@ -31,13 +31,175 @@
         >
           <option value="" disabled selected>Limit:</option>
           <option v-for="item in limits" :key="item" :value="item.value">
-            {{ item.text }}{{item.value}}
+            {{ item.text }}{{ item.value }}
           </option>
         </select>
       </form>
 
       <button type="button" class="sort sort-up"></button>
       <button type="button" class="sort sort-down"></button>
+
+      <masonry-wall
+        :items="images"
+        :ssr-columns="3"
+        :column-width="180"
+        :gap="10"
+        class="wall"
+      >
+        <template #default="{ item }">
+          <img
+            v-if="item.width > 50 && item.width <= 300"
+            :src="item.url"
+            alt="cat"
+            :style="{
+              width: item.width * 0.6 + 'px',
+              height: 'auto',
+              borderRadius: 10 + 'px',
+            }"
+          />
+          <img
+            v-else-if="item.width > 300 && item.width <= 400"
+            :src="item.url"
+            alt="cat"
+            :style="{
+              width: item.width * 0.45 + 'px',
+              height: 'auto',
+              borderRadius: 10 + 'px',
+            }"
+          />
+          <img
+            v-else-if="item.width > 400 && item.width <= 500"
+            :src="item.url"
+            alt="cat"
+            :style="{
+              width: item.width * 0.36 + 'px',
+              height: 'auto',
+              borderRadius: 10 + 'px',
+            }"
+          />
+          <img
+            v-else-if="item.width > 500 && item.width <= 600"
+            :src="item.url"
+            alt="cat"
+            :style="{
+              width: item.width * 0.3 + 'px',
+              height: 'auto',
+              borderRadius: 10 + 'px',
+            }"
+          />
+          <img
+            v-else-if="item.width > 600 && item.width <= 700"
+            :src="item.url"
+            alt="cat"
+            :style="{
+              width: item.width * 0.257 + 'px',
+              height: 'auto',
+              borderRadius: 10 + 'px',
+            }"
+          />
+          <img
+            v-else-if="item.width > 700 && item.width <= 800"
+            :src="item.url"
+            alt="cat"
+            :style="{
+              width: item.width * 0.225 + 'px',
+              height: 'auto',
+              borderRadius: 10 + 'px',
+            }"
+          />
+          <img
+            v-else-if="item.width > 800 && item.width <= 900"
+            :src="item.url"
+            alt="cat"
+            :style="{
+              width: item.width * 0.2 + 'px',
+              height: 'auto',
+              borderRadius: 10 + 'px',
+            }"
+          />
+          <img
+            v-else-if="item.width > 900 && item.width <= 1000"
+            :src="item.url"
+            alt="cat"
+            :style="{
+              width: item.width * 0.18 + 'px',
+              height: 'auto',
+              borderRadius: 10 + 'px',
+            }"
+          />
+          <img
+            v-else-if="item.width > 1000 && item.width <= 1100"
+            :src="item.url"
+            alt="cat"
+            :style="{
+              width: item.width * 0.163 + 'px',
+              height: 'auto',
+              borderRadius: 10 + 'px',
+            }"
+          />
+          <img
+            v-else-if="item.width > 1100 && item.width <= 1200"
+            :src="item.url"
+            alt="cat"
+            :style="{
+              width: item.width * 0.15 + 'px',
+              height: 'auto',
+              borderRadius: 10 + 'px',
+            }"
+          />
+          <img
+            v-else-if="item.width > 1200 && item.width <= 1300"
+            :src="item.url"
+            alt="cat"
+            :style="{
+              width: item.width * 0.138 + 'px',
+              height: 'auto',
+              borderRadius: 10 + 'px',
+            }"
+          />
+          <img
+            v-else-if="item.width > 1300 && item.width <= 1500"
+            :src="item.url"
+            alt="cat"
+            :style="{
+              width: item.width * 0.12 + 'px',
+              height: 'auto',
+              borderRadius: 10 + 'px',
+            }"
+          />
+          <img
+            v-else-if="item.width > 1500 && item.width < 1700"
+            :src="item.url"
+            alt="cat"
+            :style="{
+              width: item.width * 0.1 + 'px',
+              height: 'auto',
+              borderRadius: 10 + 'px',
+            }"
+          />
+          <img
+            v-else-if="item.width > 1700 && item.width < 4000"
+            :src="item.url"
+            alt="cat"
+            :style="{
+              width: item.width * 0.05 + 'px',
+              height: 'auto',
+              borderRadius: 10 + 'px',
+            }"
+          />
+          <img
+            v-else
+            :src="item.url"
+            alt="cat"
+            :style="{
+              width: item.width * 0.08 + 'px',
+              height: 'auto',
+              borderRadius: 10 + 'px',
+            }"
+          />
+          <!-- <img :src="item.url" alt="cat" :style="{width: item.width*0.3+'px', height: item.height*0.3+'px', borderRadius:10+'px'}">          -->
+        </template>
+      </masonry-wall>
 
       <!-- <button type="button" class="btn" @click="loadNextImage"></button> -->
       <!-- <img v-for="image in images" :key="image.id" :src="image.url" alt="cat" /> -->
@@ -75,7 +237,7 @@ export default {
     };
   },
   created() {
-    // this.loadNextImage();
+    this.loadImages();
     this.loadBreeds();
   },
   methods: {
@@ -83,18 +245,17 @@ export default {
       this.mainStore.currentTab = "Girlpet";
       this.$router.go(0);
     },
-    async loadNextImage() {
+    async loadImages() {
       try {
         axios.defaults.headers.common["x-api-key"] =
           "bbf7ce2f-68fc-4879-8dda-4139a8c2823b"; // Replace this with your API Key
 
         let response = await axios.get("https://api.thecatapi.com/v1/images/search", {
-          params: { limit: 10, size: "short" },
+          params: { limit: 10, size: "thumb" },
         });
         this.images = response.data; // the response is an Array, so just use the first item as the Image
 
         console.log(this.images);
-        //console.log("url:", this.image.url);
       } catch (err) {
         console.log(err);
       }
@@ -133,6 +294,14 @@ export default {
     //   this.loadBreed();
     // },
   },
+  computed: {
+    calcStyle(height, width) {
+      console.log(height, width);
+      const _height = height * 0.5;
+      const _width = width * 0.5;
+      return `height:${_height}px; width:${_width}px`;
+    },
+  },
 };
 </script>
 
@@ -151,7 +320,7 @@ export default {
 .content-row {
   margin-top: 10px;
   width: 104%;
-  height: 80vh;
+  min-height: 80vh;
   background-color: #fff;
   border-radius: 10px;
   padding: 0;
@@ -254,5 +423,10 @@ button.sort-down {
 
 button.sort-down:hover {
   background-image: url("../assets/sortDown-hover.svg");
+}
+
+.wall {
+  flex-wrap: wrap;
+  margin: 10px 0 10px 0;
 }
 </style>
