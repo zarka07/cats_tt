@@ -20,7 +20,7 @@
         </select>
       </form>
 
-      <form @submit.prevent="chooseLimit()" style="width: 8vw; margin-left: 5px">
+      <form style="width: 8vw; margin-left: 5px">
         <select
           class="selectBreed"
           aria-label="Select limit"
@@ -43,12 +43,22 @@
         :items="images"
         :ssr-columns="3"
         :column-width="180"
-        :gap="10"
+        :gap="8"
         class="wall"
       >
         <template #default="{ item }">
           <img
-            v-if="item.width > 50 && item.width <= 300"
+            v-if="item.width <= 180"
+            :src="item.url"
+            alt="cat"
+            :style="{
+              width: 180 + 'px',
+              height: 'auto',
+              borderRadius: 10 + 'px',
+            }"
+          />
+          <img
+            v-if="item.width > 180 && item.width <= 300"
             :src="item.url"
             alt="cat"
             :style="{
@@ -158,6 +168,16 @@
             }"
           />
           <img
+            v-else-if="item.width== 1200"
+            :src="item.url"
+            alt="cat"
+            :style="{
+              width: item.width * 0.15 + 'px',
+              height: 'auto',
+              borderRadius: 10 + 'px',
+            }"
+          />
+          <img
             v-else-if="item.width > 1300 && item.width <= 1500"
             :src="item.url"
             alt="cat"
@@ -224,7 +244,7 @@ export default {
     return {
       currentBreed: "",
       selectedBreed: {},
-      currentLimit: null,
+      currentLimit: 10,
       showDropdownBreeds: false,
       breeds: [],
       images: [],
@@ -251,7 +271,7 @@ export default {
           "bbf7ce2f-68fc-4879-8dda-4139a8c2823b"; // Replace this with your API Key
 
         let response = await axios.get("https://api.thecatapi.com/v1/images/search", {
-          params: { limit: 10, size: "thumb" },
+          params: { limit: this.currentLimit, size: "thumb" },
         });
         this.images = response.data; // the response is an Array, so just use the first item as the Image
 
@@ -290,9 +310,9 @@ export default {
     // },
   },
   watch: {
-    // currentBreed() {
-    //   this.loadBreed();
-    // },
+    currentLimit() {
+      this.loadImages();
+    },
   },
   computed: {
     calcStyle(height, width) {
