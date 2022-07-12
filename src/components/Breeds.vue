@@ -4,6 +4,7 @@
     <div class="row content-row">
       <button type="submit" class="back-button" value="" @click="goBack()"></button>
       <div class="tab-name"><span>BREEDS</span></div>
+
       <form>
         <select
           class="selectBreed"
@@ -13,9 +14,9 @@
           name="Breeds"
           id="breeds"
         >
-          <option value="" disabled selected>All Breeds:</option>
+          <option value="" selected>All Breeds:</option>
           <option v-for="item in breeds" :key="item" :value="item">
-            {{ item }}
+            {{ item.name }}
           </option>
         </select>
       </form>
@@ -36,193 +37,61 @@
         </select>
       </form>
 
-      <button type="button" class="sort sort-up"></button>
-      <button type="button" class="sort sort-down"></button>
+      <button type="button" class="sort sort-up" @click="order = 'desc'"></button>
+      <button type="button" class="sort sort-down" @click="order = 'asc'"></button>
 
-      <masonry-wall
-        :items="images"
-        :ssr-columns="3"
-        :column-width="180"
-        :gap="8"
-        class="wall"
-      >
-        <template #default="{ item }">
-          <img
-            :src="item.url"
-            alt="cat"
-            :style="{
-              width: 180 + 'px',
-              height: 'auto',
-              borderRadius: 10 + 'px',
-            }"
-          />
-          <!-- <img
-            v-if="item.width > 180 && item.width <= 300"
-            :src="item.url"
-            alt="cat"
-            :style="{
-              width: item.width * 0.6 + 'px',
-              height: 'auto',
-              borderRadius: 10 + 'px',
-            }"
-          />
-          <img
-            v-else-if="item.width > 300 && item.width <= 400"
-            :src="item.url"
-            alt="cat"
-            :style="{
-              width: item.width * 0.45 + 'px',
-              height: 'auto',
-              borderRadius: 10 + 'px',
-            }"
-          />
-          <img
-            v-else-if="item.width > 400 && item.width <= 500"
-            :src="item.url"
-            alt="cat"
-            :style="{
-              width: item.width * 0.36 + 'px',
-              height: 'auto',
-              borderRadius: 10 + 'px',
-            }"
-          />
-          <img
-            v-else-if="item.width > 500 && item.width <= 600"
-            :src="item.url"
-            alt="cat"
-            :style="{
-              width: item.width * 0.3 + 'px',
-              height: 'auto',
-              borderRadius: 10 + 'px',
-            }"
-          />
-          <img
-            v-else-if="item.width > 600 && item.width <= 700"
-            :src="item.url"
-            alt="cat"
-            :style="{
-              width: item.width * 0.257 + 'px',
-              height: 'auto',
-              borderRadius: 10 + 'px',
-            }"
-          />
-          <img
-            v-else-if="item.width > 700 && item.width <= 800"
-            :src="item.url"
-            alt="cat"
-            :style="{
-              width: item.width * 0.225 + 'px',
-              height: 'auto',
-              borderRadius: 10 + 'px',
-            }"
-          />
-          <img
-            v-else-if="item.width > 800 && item.width <= 900"
-            :src="item.url"
-            alt="cat"
-            :style="{
-              width: item.width * 0.2 + 'px',
-              height: 'auto',
-              borderRadius: 10 + 'px',
-            }"
-          />
-          <img
-            v-else-if="item.width > 900 && item.width <= 1000"
-            :src="item.url"
-            alt="cat"
-            :style="{
-              width: item.width * 0.18 + 'px',
-              height: 'auto',
-              borderRadius: 10 + 'px',
-            }"
-          />
-          <img
-            v-else-if="item.width > 1000 && item.width <= 1100"
-            :src="item.url"
-            alt="cat"
-            :style="{
-              width: item.width * 0.163 + 'px',
-              height: 'auto',
-              borderRadius: 10 + 'px',
-            }"
-          />
-          <img
-            v-else-if="item.width > 1100 && item.width <= 1200"
-            :src="item.url"
-            alt="cat"
-            :style="{
-              width: item.width * 0.15 + 'px',
-              height: 'auto',
-              borderRadius: 10 + 'px',
-            }"
-          />
-          <img
-            v-else-if="item.width > 1200 && item.width <= 1300"
-            :src="item.url"
-            alt="cat"
-            :style="{
-              width: item.width * 0.138 + 'px',
-              height: 'auto',
-              borderRadius: 10 + 'px',
-            }"
-          />
-          <img
-            v-else-if="item.width== 1280"
-            :src="item.url"
-            alt="cat"
-            :style="{
-              width: item.width * 0.15 + 'px',
-              height: 'auto',
-              borderRadius: 10 + 'px',
-            }"
-          />
-          <img
-            v-else-if="item.width > 1300 && item.width <= 1500"
-            :src="item.url"
-            alt="cat"
-            :style="{
-              width: item.width * 0.12 + 'px',
-              height: 'auto',
-              borderRadius: 10 + 'px',
-            }"
-          />
-          <img
-            v-else-if="item.width > 1500 && item.width < 1700"
-            :src="item.url"
-            alt="cat"
-            :style="{
-              width: item.width * 0.1 + 'px',
-              height: 'auto',
-              borderRadius: 10 + 'px',
-            }"
-          />
-          <img
-            v-else-if="item.width > 1700 && item.width < 4000"
-            :src="item.url"
-            alt="cat"
-            :style="{
-              width: item.width * 0.05 + 'px',
-              height: 'auto',
-              borderRadius: 10 + 'px',
-            }"
-          />
-          <img
-            v-else
-            :src="item.url"
-            alt="cat"
-            :style="{
-              width: item.width * 0.08 + 'px',
-              height: 'auto',
-              borderRadius: 10 + 'px',
-            }"
-          /> -->
-          <!-- <img :src="item.url" alt="cat" :style="{width: item.width*0.3+'px', height: item.height*0.3+'px', borderRadius:10+'px'}">          -->
-        </template>
-      </masonry-wall>
+      <div class="wall" v-if="showMasonry">
+        <masonry-wall
+          :items="displayedBreeds"
+          :ssr-columns="3"
+          :column-width="180"
+          :gap="8"
+        >
+          <template #default="{ item }">
+            <img
+              :src="item.image.url"
+              alt="cat"
+              :style="{
+                width: 180 + 'px',
+                height: 'auto',
+                borderRadius: 10 + 'px',
+              }"
+            />
+          </template>
+        </masonry-wall>
 
+        <nav class="breeds-nav" aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item">
+              <button
+              
+                type="button"
+                class="page prev-page"
+                @click="this.mainStore.currentPage--"
+                :style="(this.mainStore.currentPage != 1)?{backgroundColor:'#FBE0DC'}:{backgroundColor:'#F8F8F7'}"
+              >
+                Prev
+              </button>
+            </li>
+            
+            <li class="page-item">
+              <button
+                
+                type="button"
+                @click="this.mainStore.currentPage++"
+                class="page next-page"
+                :style="(this.mainStore.currentPage < pages.length)?{backgroundColor:'#FBE0DC'}:{backgroundColor:'#F8F8F7'}"
+              >
+                Next
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
 
-      <!-- <button type="button" class="btn" @click="loadNextImage"></button> -->
-      <!-- <img v-for="image in images" :key="image.id" :src="image.url" alt="cat" /> -->
+      <div v-else>
+        <img :src="selectedBreed.url" :alt="selectedBreed.id" />
+      </div>
     </div>
   </div>
 </template>
@@ -242,7 +111,8 @@ export default {
   },
   data() {
     return {
-      currentBreed: "",
+      showMasonry: true,
+      currentBreed: {},
       selectedBreed: {},
       currentLimit: 10,
       showDropdownBreeds: false,
@@ -254,10 +124,11 @@ export default {
         { text: "Limit: ", value: 15 },
         { text: "Limit: ", value: 20 },
       ],
+      perPage: 10,
+      pages: [],
     };
   },
   created() {
-    this.loadImages();
     this.loadBreeds();
   },
   methods: {
@@ -265,61 +136,80 @@ export default {
       this.mainStore.currentTab = "Girlpet";
       this.$router.go(0);
     },
-    async loadImages() {
-      try {
-        axios.defaults.headers.common["x-api-key"] =
-          "bbf7ce2f-68fc-4879-8dda-4139a8c2823b"; // Replace this with your API Key
-
-        let response = await axios.get("https://api.thecatapi.com/v1/images/search", {
-          params: { limit: this.currentLimit, size: "thumb" },
-        });
-        this.images = response.data; // the response is an Array, so just use the first item as the Image
-
-        console.log(this.images);
-      } catch (err) {
-        console.log(err);
-      }
-    },
 
     async loadBreeds() {
       try {
         axios.defaults.headers.common["x-api-key"] =
           "bbf7ce2f-68fc-4879-8dda-4139a8c2823b"; // Replace this with your API Key
         let response = await axios.get("https://api.thecatapi.com/v1/breeds");
-        let breeds = response.data; // the response is an Array, so just use the first item as the Image
-        for (let i = 0; i < breeds.length; i++) {
-          this.breeds.push(breeds[i].name);
-        }
+        this.breeds = response.data; // the response is an Array, so just use the first item as the Image
+        console.log(this.breeds);
       } catch (error) {
         console.log(err);
       }
     },
 
-    // async loadBreed() {
-    //   try {
-    //     axios.defaults.headers.common["x-api-key"] =
-    //       "bbf7ce2f-68fc-4879-8dda-4139a8c2823b"; // Replace this with your API Key
-    //     let response = await axios.get(
-    //       `https://api.thecatapi.com/v1/breeds/search?q=${this.currentBreed}`
-    //     );
-    //     let breed = response.data; // the response is an Array, so just use the first item as the Image
-    //     console.log(breed);
-    //   } catch (error) {
-    //     console.log(err);
-    //   }
-    // },
+    async loadBreed() {
+      let id = this.currentBreed.id;
+      try {
+        axios.defaults.headers.common["x-api-key"] =
+          "bbf7ce2f-68fc-4879-8dda-4139a8c2823b"; // Replace this with your API Key
+        let response = await axios.get(
+          `https://api.thecatapi.com/v1/images/search?breed_ids=${id}`
+        );
+        this.selectedBreed = response.data[0]; // the response is an Array, so just use the first item as the Image
+        //this.selectedBreed = breed[0];
+        console.log("here", this.selectedBreed);
+      } catch (error) {
+        console.log(err);
+      }
+    },
+
+    setPages() {
+      let numberOfPages = Math.ceil(this.breeds.length / this.perPage);
+      for (let index = 1; index <= numberOfPages; index++) {
+        this.pages.push(index);
+      }
+    },
+    paginate(breeds) {
+      let page = this.mainStore.currentPage;
+      let perPage = this.perPage;
+      let from = page * perPage - perPage;
+      let to = page * perPage;
+      return breeds.slice(from, to);
+    },
   },
   watch: {
     currentLimit() {
-      this.loadImages();
+      this.loadBreeds();
+    },
+    currentBreed() {
+      if (this.currentBreed === "") {
+        this.loadBreeds();
+        this.showMasonry = true;
+      } else {
+        this.loadBreed();
+        this.showMasonry = false;
+      }
+    },
+    breeds() {
+      this.setPages();
     },
   },
   computed: {
-    calcStyle(height, width) {
-      console.log(height, width);
-      const _height = height * 0.5;
-      const _width = width * 0.5;
-      return `height:${_height}px; width:${_width}px`;
+    displayedBreeds() {
+      return this.paginate(this.breeds);
+    },
+    sortedProducts() {
+      if (this.products.length > 0) {
+        let productsArray = this.products.slice(0);
+        function compare(a, b) {
+          if (a.title.toLowerCase() < b.title.toLowerCase()) return -1;
+          if (a.title.toLowerCase() > b.title.toLowerCase()) return 1;
+          return 0;
+        }
+        return productsArray.sort(compare);
+      }
     },
   },
 };
@@ -448,5 +338,51 @@ button.sort-down:hover {
 .wall {
   flex-wrap: wrap;
   margin: 10px 0 10px 0;
+}
+
+nav.breeds-nav {
+  display: inline-block;
+}
+
+button.page {
+  margin:0 10px 0 10px;
+  background: #fbe0dc;
+  color: #ff868e;
+  font-family: "Jost", sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 0.2rem 0.5rem;
+  background-repeat: no-repeat;
+  width: 90px;
+  height: 30px;
+  border-radius: 10px;
+  border-color: transparent;
+}
+
+button.next-page {
+  background-image: url("../assets/next-shevron.svg");
+  background-position: 65px;
+  text-align:left;
+  padding-left:25px;
+}
+
+button.prev-page {
+  background-image: url("../assets/prev-shevron.svg");
+  background-position: 15px;
+  text-align:right;
+  padding-right:25px;
+}
+
+.offset {
+  width: 500px !important;
+  margin: 20px auto;
+}
+
+.pagination {
+  align-items: center;
+  justify-content: center;
+  padding-left: 0;
+  margin: 10px 0 0 0;
 }
 </style>

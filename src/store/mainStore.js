@@ -4,6 +4,7 @@ export const MAINstore = defineStore('mainStore',{
   state: ()=> {
     return{
       currentTab: "Girlpet",
+      currentPage: 1,
     }
   },
 })
