@@ -48,7 +48,6 @@
       >
         <template #default="{ item }">
           <img
-            v-if="item.width <= 180"
             :src="item.url"
             alt="cat"
             :style="{
@@ -57,7 +56,7 @@
               borderRadius: 10 + 'px',
             }"
           />
-          <img
+          <!-- <img
             v-if="item.width > 180 && item.width <= 300"
             :src="item.url"
             alt="cat"
@@ -168,7 +167,7 @@
             }"
           />
           <img
-            v-else-if="item.width== 1200"
+            v-else-if="item.width== 1280"
             :src="item.url"
             alt="cat"
             :style="{
@@ -216,10 +215,11 @@
               height: 'auto',
               borderRadius: 10 + 'px',
             }"
-          />
+          /> -->
           <!-- <img :src="item.url" alt="cat" :style="{width: item.width*0.3+'px', height: item.height*0.3+'px', borderRadius:10+'px'}">          -->
         </template>
       </masonry-wall>
+
 
       <!-- <button type="button" class="btn" @click="loadNextImage"></button> -->
       <!-- <img v-for="image in images" :key="image.id" :src="image.url" alt="cat" /> -->
