@@ -25,7 +25,7 @@
         <select
           class="selectBreed"
           aria-label="Select limit"
-          v-model="currentLimit"
+          v-model="perPage"
           title="Limit"
           name="Limit"
           id="limit"
@@ -48,15 +48,24 @@
           :gap="8"
         >
           <template #default="{ item }">
-            <img
-              :src="item.image.url"
-              alt="cat"
-              :style="{
-                width: 180 + 'px',
-                height: 'auto',
-                borderRadius: 10 + 'px',
-              }"
-            />
+            <div class="image">
+              <img
+                @mouseover="() => (visibleHover = item.id)"
+                @mouseleave="() => (visibleHover = null)"
+                :src="item.image.url"
+                :alt="item.id"
+                :style="{
+                  width: 180 + 'px',
+                  height: 'auto',
+                  borderRadius: 10 + 'px',
+                }"
+              />
+              <div v-if="visibleHover == item.id" class="description">
+                <div class="breed-name">{{ item.name }}</div>
+              </div>
+
+              <!--  -->
+            </div>
           </template>
         </masonry-wall>
 
@@ -64,23 +73,31 @@
           <ul class="pagination">
             <li class="page-item">
               <button
-              
+                :disabled="prevPageDisabled"
                 type="button"
                 class="page prev-page"
                 @click="this.mainStore.currentPage--"
-                :style="(this.mainStore.currentPage != 1)?{backgroundColor:'#FBE0DC'}:{backgroundColor:'#F8F8F7'}"
+                :style="
+                  this.mainStore.currentPage != 1
+                    ? { backgroundColor: '#FBE0DC' }
+                    : { backgroundColor: '#F8F8F7' }
+                "
               >
                 Prev
               </button>
             </li>
-            
+
             <li class="page-item">
               <button
-                
+                :disabled="nextPageDisabled"
                 type="button"
                 @click="this.mainStore.currentPage++"
                 class="page next-page"
-                :style="(this.mainStore.currentPage < pages.length)?{backgroundColor:'#FBE0DC'}:{backgroundColor:'#F8F8F7'}"
+                :style="
+                  this.mainStore.currentPage < pages.length
+                    ? { backgroundColor: '#FBE0DC' }
+                    : { backgroundColor: '#F8F8F7' }
+                "
               >
                 Next
               </button>
@@ -111,20 +128,20 @@ export default {
   },
   data() {
     return {
+      visibleHover: null,
+      prevPageDisabled: true,
+      nextPageDisabled: false,
       showMasonry: true,
       currentBreed: {},
       selectedBreed: {},
-      currentLimit: 10,
-      showDropdownBreeds: false,
       breeds: [],
-      images: [],
       limits: [
         { text: "Limit: ", value: 5 },
         { text: "Limit: ", value: 10 },
         { text: "Limit: ", value: 15 },
         { text: "Limit: ", value: 20 },
       ],
-      perPage: 10,
+      perPage: 5,
       pages: [],
     };
   },
@@ -158,7 +175,6 @@ export default {
           `https://api.thecatapi.com/v1/images/search?breed_ids=${id}`
         );
         this.selectedBreed = response.data[0]; // the response is an Array, so just use the first item as the Image
-        //this.selectedBreed = breed[0];
         console.log("here", this.selectedBreed);
       } catch (error) {
         console.log(err);
@@ -180,6 +196,10 @@ export default {
     },
   },
   watch: {
+    currentPage() {
+      this.prevPageDisabled = this.currentPage == 1 ? true : false;
+      this.nextPageDisabled = this.currentPage < this.pages.length ? false : true;
+    },
     currentLimit() {
       this.loadBreeds();
     },
@@ -197,6 +217,9 @@ export default {
     },
   },
   computed: {
+    currentPage() {
+      return this.mainStore.currentPage;
+    },
     displayedBreeds() {
       return this.paginate(this.breeds);
     },
@@ -345,7 +368,7 @@ nav.breeds-nav {
 }
 
 button.page {
-  margin:0 10px 0 10px;
+  margin: 0 10px 0 10px;
   background: #fbe0dc;
   color: #ff868e;
   font-family: "Jost", sans-serif;
@@ -363,15 +386,15 @@ button.page {
 button.next-page {
   background-image: url("../assets/next-shevron.svg");
   background-position: 65px;
-  text-align:left;
-  padding-left:25px;
+  text-align: left;
+  padding-left: 25px;
 }
 
 button.prev-page {
   background-image: url("../assets/prev-shevron.svg");
   background-position: 15px;
-  text-align:right;
-  padding-right:25px;
+  text-align: right;
+  padding-right: 25px;
 }
 
 .offset {
@@ -384,5 +407,37 @@ button.prev-page {
   justify-content: center;
   padding-left: 0;
   margin: 10px 0 0 0;
+}
+
+.image {
+  position: relative;
+}
+
+div.description {
+  background-color: rgba(255, 134, 142, 0.6);
+  width: 180px;
+  height: 100%;
+  border-radius: 10px;
+  position: absolute;
+  top: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.breed-name {
+  font-family: "Jost", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  z-index: 999;
+  width: 90%;
+  min-height: 30px;
+  height: auto;
+  background-color: #fff;
+  border: transparent;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  padding: 5px;
+  color: #ff868e;
 }
 </style>
