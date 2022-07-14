@@ -1,125 +1,130 @@
 <template>
   <div class="container-voting">
     <search-panel></search-panel>
+
     <div class="row content-row">
-      <button type="submit" class="back-button" value="" @click="goBack()"></button>
-      <div class="tab-name"><span>BREEDS</span></div>
-
-      <form>
-        <select
-          class="selectBreed"
-          aria-label="All breeds"
-          v-model="currentBreed"
-          title="All breeds"
-          name="Breeds"
-          id="breeds"
-        >
-          <option value="" selected>All Breeds:</option>
-          <option v-for="item in breeds" :key="item" :value="item">
-            {{ item.name }}
-          </option>
-        </select>
-      </form>
-
-      <form style="width: 8vw; margin-left: 5px">
-        <select
-          class="selectBreed"
-          aria-label="Select limit"
-          v-model="perPage"
-          title="Limit"
-          name="Limit"
-          id="limit"
-        >
-          <option value="" disabled selected>Limit:</option>
-          <option v-for="item in limits" :key="item" :value="item.value">
-            {{ item.text }}{{ item.value }}
-          </option>
-        </select>
-      </form>
-
-      <button type="button" class="sort sort-up" @click="order = 'desc'"></button>
-      <button type="button" class="sort sort-down" @click="order = 'asc'"></button>
-
-      <div class="wall" v-if="showMasonry">
-        <masonry-wall
-          :items="displayedBreeds"
-          :ssr-columns="3"
-          :column-width="180"
-          :gap="8"
-        >
-          <template #default="{ item }">
-            <div class="image">
-              <img
-                @mouseover="() => (visibleHover = item.id)"
-                @mouseleave="() => (visibleHover = null)"
-                :src="item.image.url"
-                :alt="item.id"
-                :style="{
-                  width: 180 + 'px',
-                  height: 'auto',
-                  borderRadius: 10 + 'px',
-                }"
-              />
-              <div v-if="visibleHover == item.id" class="description">
-                <div class="breed-name">{{ item.name }}</div>
-              </div>
-
-              <!--  -->
-            </div>
-          </template>
-        </masonry-wall>
-
-        <nav class="breeds-nav" aria-label="Page navigation example">
-          <ul class="pagination">
-            <li class="page-item">
-              <button
-                :disabled="prevPageDisabled"
-                type="button"
-                class="page prev-page"
-                @click="this.mainStore.currentPage--"
-                :style="
-                  this.mainStore.currentPage != 1
-                    ? { backgroundColor: '#FBE0DC' }
-                    : { backgroundColor: '#F8F8F7' }
-                "
-              >
-                Prev
-              </button>
-            </li>
-
-            <li class="page-item">
-              <button
-                :disabled="nextPageDisabled"
-                type="button"
-                @click="this.mainStore.currentPage++"
-                class="page next-page"
-                :style="
-                  this.mainStore.currentPage < pages.length
-                    ? { backgroundColor: '#FBE0DC' }
-                    : { backgroundColor: '#F8F8F7' }
-                "
-              >
-                Next
-              </button>
-            </li>
-          </ul>
-        </nav>
+      <div class="current-tab">
+        <button type="submit" class="back-button" value="" @click="goBack()"></button>
+        <div class="tab-name"><span>BREEDS</span></div>
       </div>
-
+      <Loader v-if="this.mainStore.loading" />
       <div v-else>
-        <img :src="selectedBreed.url" :alt="selectedBreed.id" />
+        <form>
+          <select
+            class="selectBreed"
+            aria-label="All breeds"
+            v-model="currentBreed"
+            title="All breeds"
+            name="Breeds"
+            id="breeds"
+          >
+            <option value="" selected>All Breeds:</option>
+            <option v-for="item in breeds" :key="item" :value="item">
+              {{ item.name }}
+            </option>
+          </select>
+        </form>
+
+        <form style="width: 8vw; margin-left: 5px">
+          <select
+            class="selectBreed"
+            aria-label="Select limit"
+            v-model="perPage"
+            title="Limit"
+            name="Limit"
+            id="limit"
+          >
+            <option value="" disabled selected>Limit:</option>
+            <option v-for="item in limits" :key="item" :value="item.value">
+              {{ item.text }}{{ item.value }}
+            </option>
+          </select>
+        </form>
+
+        <button type="button" class="sort sort-up" @click="order = 'desc'"></button>
+        <button type="button" class="sort sort-down" @click="order = 'asc'"></button>
+
+        <div class="wall" v-if="showMasonry">
+          <masonry-wall
+            :items="displayedBreeds"
+            :ssr-columns="3"
+            :column-width="180"
+            :gap="8"
+          >
+            <template #default="{ item }">
+              <div class="image">
+                <img
+                  @mouseover="() => (visibleHover = item.id)"
+                  @mouseleave="() => (visibleHover = null)"
+                  :src="item.image.url"
+                  :alt="item.id"
+                  :style="{
+                    width: 180 + 'px',
+                    height: 'auto',
+                    borderRadius: 10 + 'px',
+                  }"
+                />
+                <div v-if="visibleHover == item.id" class="description">
+                  <div class="breed-name">{{ item.name }}</div>
+                </div>
+
+                <!--  -->
+              </div>
+            </template>
+          </masonry-wall>
+
+          <nav class="breeds-nav" aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item">
+                <button
+                  :disabled="prevPageDisabled"
+                  type="button"
+                  class="page prev-page"
+                  @click="this.mainStore.currentPage--"
+                  :style="
+                    this.mainStore.currentPage != 1
+                      ? { backgroundColor: '#FBE0DC' }
+                      : { backgroundColor: '#F8F8F7' }
+                  "
+                >
+                  Prev
+                </button>
+              </li>
+
+              <li class="page-item">
+                <button
+                  :disabled="nextPageDisabled"
+                  type="button"
+                  @click="this.mainStore.currentPage++"
+                  class="page next-page"
+                  :style="
+                    this.mainStore.currentPage < pages.length
+                      ? { backgroundColor: '#FBE0DC' }
+                      : { backgroundColor: '#F8F8F7' }
+                  "
+                >
+                  Next
+                </button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <div v-else>
+          <img :src="selectedBreed.url" :alt="selectedBreed.id" />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Loader from "../components/Loader.vue";
 import SearchPanel from "../components/SearchPanel.vue";
 import { MAINstore } from "../store/mainStore";
 import axios from "axios";
 export default {
   name: "tab-breeds",
-  components: { SearchPanel },
+  components: { SearchPanel, Loader },
   setup() {
     const mainStore = MAINstore();
     return {
@@ -146,7 +151,7 @@ export default {
     };
   },
   created() {
-    this.loadBreeds();
+    //this.loadBreeds();
   },
   methods: {
     goBack() {
@@ -156,6 +161,7 @@ export default {
 
     async loadBreeds() {
       try {
+        this.mainStore.loading = true;
         axios.defaults.headers.common["x-api-key"] =
           "bbf7ce2f-68fc-4879-8dda-4139a8c2823b"; // Replace this with your API Key
         let response = await axios.get("https://api.thecatapi.com/v1/breeds");
@@ -164,6 +170,7 @@ export default {
       } catch (error) {
         console.log(err);
       }
+      this.mainStore.loading = false;
     },
 
     async loadBreed() {
@@ -253,12 +260,18 @@ export default {
 .content-row {
   margin-top: 10px;
   width: 104%;
-  min-height: 80vh;
+  min-height: 85vh;
   background-color: #fff;
   border-radius: 10px;
   padding: 0;
   display: flex;
   justify-content: space-evenly;
+  align-items: flex-start;
+}
+
+.current-tab{
+  display: flex;
+  justify-content: flex-start;
 }
 
 button.back-button {
@@ -283,6 +296,7 @@ button.back-button:hover {
 
 div.tab-name {
   margin-top: 10px;
+  margin-left: 10px;
   text-align: center;
   background-color: #ff868e;
   border-radius: 10px;

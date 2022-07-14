@@ -5,6 +5,7 @@ export const MAINstore = defineStore('mainStore',{
     return{
       currentTab: "Girlpet",
       currentPage: 1,
+      loading: true,
     }
   },
 })
