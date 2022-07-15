@@ -3,50 +3,51 @@
     <search-panel></search-panel>
 
     <div class="row content-row">
-      <div class="current-tab">
-        <button type="submit" class="back-button" value="" @click="goBack()"></button>
-        <div class="tab-name"><span>BREEDS</span></div>
-      </div>
       <Loader v-if="this.mainStore.loading" />
       <div v-else>
-        <form>
-          <select
-            class="selectBreed"
-            aria-label="All breeds"
-            v-model="currentBreed"
-            title="All breeds"
-            name="Breeds"
-            id="breeds"
-          >
-            <option value="" selected>All Breeds:</option>
-            <option v-for="item in breeds" :key="item" :value="item">
-              {{ item.name }}
-            </option>
-          </select>
-        </form>
+        <div class="current-tab" v-show="showMasonry">
+          <button type="submit" class="back-button" value="" @click="goBack()"></button>
+          <div class="tab-name"><span>BREEDS</span></div>
+          
+            <form>
+            <select
+              class="selectBreed"
+              aria-label="All breeds"
+              v-model="currentBreed"
+              title="All breeds"
+              name="Breeds"
+              id="breeds"
+            >
+              <option value="" selected>All Breeds:</option>
+                <option v-for="item in breeds" :key="item" :value="item">
+                  {{ item.name }}
+                </option>
+              </select>
+            </form>
 
-        <form style="width: 8vw; margin-left: 5px">
-          <select
-            class="selectBreed"
-            aria-label="Select limit"
-            v-model="perPage"
-            title="Limit"
-            name="Limit"
-            id="limit"
-          >
-            <option value="" disabled selected>Limit:</option>
-            <option v-for="item in limits" :key="item" :value="item.value">
-              {{ item.text }}{{ item.value }}
-            </option>
-          </select>
-        </form>
+            <form style="width: 8vw; margin-left: 5px">
+              <select
+                class="selectBreed"
+                aria-label="Select limit"
+                v-model="perPage"
+                title="Limit"
+                name="Limit"
+                id="limit"
+              >
+                <option value="" disabled selected>Limit:</option>
+                <option v-for="item in limits" :key="item" :value="item.value">
+                  {{ item.text }}{{ item.value }}
+                </option>
+              </select>
+            </form>
 
-        <button type="button" class="sort sort-up" @click="order = 'desc'"></button>
-        <button type="button" class="sort sort-down" @click="order = 'asc'"></button>
+            <button type="button" class="sort sort-up" @click="currentSorting = 'asc'"></button>
+            <button type="button" class="sort sort-down" @click="currentSorting = 'desc'"></button>
+        </div>
 
         <div class="wall" v-if="showMasonry">
           <masonry-wall
-            :items="displayedBreeds"
+            :items="sortedBreeds"
             :ssr-columns="3"
             :column-width="180"
             :gap="8"
@@ -65,7 +66,7 @@
                   }"
                 />
                 <div v-if="visibleHover == item.id" class="description">
-                  <div class="breed-name">{{ item.name }}</div>
+                  <div class="hover-breed-name">{{ item.name }}</div>
                 </div>
 
                 <!--  -->
@@ -109,8 +110,21 @@
             </ul>
           </nav>
         </div>
-        <div v-else>
-          <img :src="selectedBreed.url" :alt="selectedBreed.id" />
+
+        <div class="selected-breed" v-else>
+          <div class="current-breed-tab">
+            <button type="submit" class="back-button" value="" @click="goBackToManosry()"></button>
+            <div class="breed-name"><span>BREEDS</span></div>
+              <div class="breed-id">
+                {{selectedBreed.breeds[0].name}}
+              </div>
+          </div>
+          <img class="selected-breed-image" :src="selectedBreed.url" :alt="selectedBreed.id" />
+          <div class="current-breed-description">
+            <h4 class="description-breed-name">{{selectedBreed.breeds[0].name}}</h4>
+            <h6 class="description-breed-country">{{selectedBreed.breeds[0].origin}}</h6>
+
+          </div>
         </div>
       </div>
     </div>
@@ -133,6 +147,7 @@ export default {
   },
   data() {
     return {
+      currentSorting: "desc",
       visibleHover: null,
       prevPageDisabled: true,
       nextPageDisabled: false,
@@ -151,12 +166,17 @@ export default {
     };
   },
   created() {
-    //this.loadBreeds();
+    this.loadBreeds();
   },
   methods: {
     goBack() {
       this.mainStore.currentTab = "Girlpet";
       this.$router.go(0);
+    },
+
+    goBackToManosry(){
+      this.showMasonry = true;
+      this.currentBreed = ""
     },
 
     async loadBreeds() {
@@ -166,15 +186,16 @@ export default {
           "bbf7ce2f-68fc-4879-8dda-4139a8c2823b"; // Replace this with your API Key
         let response = await axios.get("https://api.thecatapi.com/v1/breeds");
         this.breeds = response.data; // the response is an Array, so just use the first item as the Image
+        this.mainStore.loading = false;
         console.log(this.breeds);
       } catch (error) {
         console.log(err);
       }
-      this.mainStore.loading = false;
     },
 
     async loadBreed() {
       let id = this.currentBreed.id;
+      this.mainStore.loading = true;
       try {
         axios.defaults.headers.common["x-api-key"] =
           "bbf7ce2f-68fc-4879-8dda-4139a8c2823b"; // Replace this with your API Key
@@ -183,6 +204,7 @@ export default {
         );
         this.selectedBreed = response.data[0]; // the response is an Array, so just use the first item as the Image
         console.log("here", this.selectedBreed);
+        this.mainStore.loading = false;
       } catch (error) {
         console.log(err);
       }
@@ -212,9 +234,10 @@ export default {
     },
     currentBreed() {
       if (this.currentBreed === "") {
-        this.loadBreeds();
+        //this.loadBreeds();
         this.showMasonry = true;
       } else {
+
         this.loadBreed();
         this.showMasonry = false;
       }
@@ -224,21 +247,27 @@ export default {
     },
   },
   computed: {
+    showBreeds(){
+      return this.mainStore.showBreeds;
+    },
     currentPage() {
       return this.mainStore.currentPage;
     },
     displayedBreeds() {
       return this.paginate(this.breeds);
     },
-    sortedProducts() {
-      if (this.products.length > 0) {
-        let productsArray = this.products.slice(0);
-        function compare(a, b) {
-          if (a.title.toLowerCase() < b.title.toLowerCase()) return -1;
-          if (a.title.toLowerCase() > b.title.toLowerCase()) return 1;
-          return 0;
-        }
-        return productsArray.sort(compare);
+    sortedBreeds() {
+      switch (this.currentSorting) {
+        case "desc":
+          return this.displayedBreeds.sort((a, b) => {
+            if (a.name < b.name) return -1;
+            if (a.name > b.name) return 1;
+          });
+        case "asc":
+          return this.displayedBreeds.sort((a, b) => {
+            if (a.name < b.name) return 1;
+            if (a.name > b.name) return -1;
+          });
       }
     },
   },
@@ -266,13 +295,13 @@ export default {
   padding: 0;
   display: flex;
   justify-content: space-evenly;
-  align-items: flex-start;
+  /* align-items: flex-start; */
 }
 
 .current-tab{
   display: flex;
-  justify-content: flex-start;
-}
+  justify-content: space-between;
+} 
 
 button.back-button {
   background-image: url("../assets/arrow-left.svg");
@@ -296,19 +325,22 @@ button.back-button:hover {
 
 div.tab-name {
   margin-top: 10px;
-  margin-left: 10px;
   text-align: center;
-  background-color: #ff868e;
+  background-color: #FBE0DC;
   border-radius: 10px;
   height: 30px;
   width: 140px;
-  color: #fff;
+  color: #FF868E;
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: "Jost", sans-serif;
   font-weight: 500;
   font-size: 15px;
+}
+
+div.tab-name:hover{
+  background-color: #ff868e;
 }
 
 form {
@@ -372,9 +404,11 @@ button.sort-down:hover {
   background-image: url("../assets/sortDown-hover.svg");
 }
 
+
 .wall {
   flex-wrap: wrap;
   margin: 10px 0 10px 0;
+  position: relative;
 }
 
 nav.breeds-nav {
@@ -439,19 +473,83 @@ div.description {
   justify-content: center;
 }
 
-.breed-name {
+.current-breed-tab{
+  display: flex;
+  justify-content:flex-start;
+}
+
+.hover-breed-name {
+  margin-top: 10px;
+  text-align: center;
+  background-color: #FFF;
+  border-radius: 10px;
+  height: 30px;
+  width: 140px;
+  color: #FF868E;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-family: "Jost", sans-serif;
   font-weight: 500;
-  font-size: 14px;
-  z-index: 999;
-  width: 90%;
-  min-height: 30px;
-  height: auto;
-  background-color: #fff;
-  border: transparent;
-  border-radius: 10px;
+  font-size: 15px;
   margin-bottom: 10px;
-  padding: 5px;
-  color: #ff868e;
+}
+
+.selected-breed-image {
+  width:100%;
+  height:auto;
+  margin-top:10px;
+  border-radius: 10px;
+  border-color: transparent;
+}
+
+.breed-name{
+  margin-top: 10px;
+  text-align: center;
+  background-color: #FBE0DC;
+  border-radius: 10px;
+  height: 30px;
+  width: 140px;
+  color: #FF868E;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Jost", sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  margin-left: 10px;
+}
+
+.breed-id{
+  margin-top: 10px;
+  margin-left: 10px;
+  text-align: center;
+  background-color: #ff868e;
+  border-radius: 10px;
+  height: 30px;
+  min-width: 50px;
+  width: auto;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Jost", sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  padding:10px;
+}
+
+.current-breed-description{
+  width:100%;
+  height:auto;
+  margin-top:10px;
+  border-radius: 10px;
+  border: 2px solid #FBE0DC;
+  font-family: "Jost", sans-serif;
+  font-weight: 500;
+}
+
+h6.description-breed-country{
+  color: #8C8C8C;
 }
 </style>
