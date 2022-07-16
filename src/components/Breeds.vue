@@ -7,7 +7,7 @@
       <div v-else>
         <div class="current-tab" v-show="showMasonry">
           <button type="submit" class="back-button" value="" @click="goBack()"></button>
-          <div class="tab-name"><span>BREEDS</span></div>
+          <div class="tab-name">BREEDS</div>
           
             <form>
             <select
@@ -114,7 +114,7 @@
         <div class="selected-breed" v-else>
           <div class="current-breed-tab">
             <button type="submit" class="back-button" value="" @click="goBackToManosry()"></button>
-            <div class="breed-name"><span>BREEDS</span></div>
+            <div class="breed-name">BREEDS</div>
               <div class="breed-id">
                 {{selectedBreed.breeds[0].name}}
               </div>
@@ -122,8 +122,18 @@
           <img class="selected-breed-image" :src="selectedBreed.url" :alt="selectedBreed.id" />
           <div class="current-breed-description">
             <h4 class="description-breed-name">{{selectedBreed.breeds[0].name}}</h4>
-            <h6 class="description-breed-country">{{selectedBreed.breeds[0].origin}}</h6>
-
+            <!-- <h6 class="description-breed-country">{{selectedBreed.breeds[0].origin}}</h6> -->
+            <div class="description-row">
+              <div class="col-5">
+                <div><b>Temperament:</b></div>
+                <div><span>{{selectedBreed.breeds[0].temperament}}</span></div>
+              </div>
+              <div class="col-5">
+                <div><b>Origin: </b><span>{{selectedBreed.breeds[0].origin}}</span></div>
+                <div><b>Weight: </b><span>{{selectedBreed.breeds[0].weight.metric}} kgs</span></div>
+                <div><b>Life span: </b><span>{{selectedBreed.breeds[0].life_span}} years</span></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -326,21 +336,17 @@ button.back-button:hover {
 div.tab-name {
   margin-top: 10px;
   text-align: center;
-  background-color: #FBE0DC;
+  background-color: #ff868e;
   border-radius: 10px;
   height: 30px;
   width: 140px;
-  color: #FF868E;
+  color: #FFF;
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: "Jost", sans-serif;
   font-weight: 500;
   font-size: 15px;
-}
-
-div.tab-name:hover{
-  background-color: #ff868e;
 }
 
 form {
@@ -541,15 +547,43 @@ div.description {
 
 .current-breed-description{
   width:100%;
+  min-height:150px;
   height:auto;
-  margin-top:10px;
+  margin-top:30px;
+  margin-bottom: 30px;
   border-radius: 10px;
   border: 2px solid #FBE0DC;
   font-family: "Jost", sans-serif;
   font-weight: 500;
+  position: relative;
+}
+
+h4.description-breed-name{
+  position: absolute;
+  left:35%;
+  top:-18px;
+  background-color: #FFF;
+  border:2px solid transparent;
+  width:150px;
 }
 
 h6.description-breed-country{
-  color: #8C8C8C;
+  color: #1D1D1D;
+}
+
+.description-row{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-top: 50px;
+}
+
+.col-5{
+  text-align: left;
+  font-size: 14px;
+}
+
+span{
+  color:#8C8C8C;
 }
 </style>
