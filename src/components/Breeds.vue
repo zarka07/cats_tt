@@ -8,7 +8,7 @@
     <button class="links smile-button" type="button"></button>
     <button class="links heart-button" type="button"></button>
     <button class="links nosmile-button" type="button"></button>
-  </div>
+    </div>
 
     <div class="row content-row">
       <Loader v-if="this.mainStore.loading" />
@@ -93,7 +93,7 @@
                   :style="
                     this.currentPage != 1
                       ? { backgroundColor: '#FBE0DC' }
-                      : { backgroundColor: '#F8F8F7' }
+                      : { backgroundColor: '#F8F8F7', color: '#8C8C8C' }
                   "
                 >
                   Prev
@@ -109,7 +109,7 @@
                   :style="
                     this.mainStore.currentPage < pages.length
                       ? { backgroundColor: '#FBE0DC' }
-                      : { backgroundColor: '#F8F8F7' }
+                      : { backgroundColor: '#F8F8F7', color: '#8C8C8C' }
                   "
                 >
                   Next
@@ -190,8 +190,6 @@ export default {
   },
   mounted(){
     this.setPages();
-    console.log('mounted current page: ', this.currentPage)
-    console.log('npd: ', this.nextPageDisabled)
   },
   methods: {
     goBack() {
@@ -243,7 +241,6 @@ export default {
       for (let index = 1; index <= numberOfPages; index++) {
         this.pages.push(index);
       }
-      console.log('pages length: ',this.pages.length)
     },
     paginate(breeds) {
       let page = this.currentPage;
@@ -309,12 +306,24 @@ export default {
           });
       }
     },
+    prevShevronDisabled(){
+      return '../assets/prev-shevron-disabled.svg'
+    }
   },
 };
 </script>
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@200&display=swap");
+.container-voting {
+  padding: 20px 0 !important;
+  height: 90vh;
+  width: 100%;
+}
+
+.row {
+  width: auto;
+}
 
 .form-row {
   display: flex;
@@ -412,17 +421,6 @@ button.links:active {
 
 .nosmile-button:active {
   background-image: url("../assets/nosmile-active.svg");
-}
-
-
-.container-voting {
-  padding: 20px 0 !important;
-  height: 90vh;
-  width: 100%;
-}
-
-.row {
-  width: auto;
 }
 
 .content-row {
@@ -573,11 +571,39 @@ button.next-page {
   padding-left: 25px;
 }
 
+button.next-page:hover {
+  background-image: url("../assets/next-shevron-hover.svg");
+  background-position: 60px;
+  text-align: left;
+  padding-left: 25px;
+  color: #FFF;
+  background-color: #FF868E!important;
+}
+
+button.next-page:disabled{
+  background-image: url("../assets/next-shevron-disabled.svg")!important;
+  background-position: 60px;
+}
+
 button.prev-page {
   background-image: url("../assets/prev-shevron.svg");
   background-position: 15px;
   text-align: right;
   padding-right: 25px;
+}
+
+button.prev-page:hover {
+  background-image: url("../assets/prev-shevron-hover.svg");
+  background-position: 12px;
+  text-align: right;
+  padding-left: 25px;
+  color: #FFF;
+  background-color: #FF868E!important;
+}
+
+button.prev-page:disabled{
+  background-image: url("../assets/prev-shevron-disabled.svg")!important;
+  background-position: 10px;
 }
 
 .offset {
@@ -689,11 +715,11 @@ div.description {
 
 h4.description-breed-name{
   position: absolute;
-  left:35%;
+  left:22%;
   top:-18px;
   background-color: #FFF;
   border:2px solid transparent;
-  width:150px;
+  width:300px;
 }
 
 h6.description-breed-country{
