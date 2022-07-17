@@ -1,6 +1,14 @@
 <template>
   <div class="container-voting">
-    <search-panel></search-panel>
+    <div class="row form-row">
+    <form class="search-form">
+      <input type="text" placeholder="Search for breeds by name" v-model="search"/>
+      <div class="search-submit"></div>
+    </form>
+    <button class="links smile-button" type="button"></button>
+    <button class="links heart-button" type="button"></button>
+    <button class="links nosmile-button" type="button"></button>
+  </div>
 
     <div class="row content-row">
       <Loader v-if="this.mainStore.loading" />
@@ -47,7 +55,7 @@
 
         <div class="wall" v-if="showMasonry">
           <masonry-wall
-            :items="sortedBreeds"
+            :items="paginatedBreeds"
             :ssr-columns="3"
             :column-width="180"
             :gap="8"
@@ -83,7 +91,7 @@
                   class="page prev-page"
                   @click="this.mainStore.currentPage--"
                   :style="
-                    this.mainStore.currentPage != 1
+                    this.currentPage != 1
                       ? { backgroundColor: '#FBE0DC' }
                       : { backgroundColor: '#F8F8F7' }
                   "
@@ -157,14 +165,16 @@ export default {
   },
   data() {
     return {
+      search: '',
       currentSorting: "desc",
       visibleHover: null,
       prevPageDisabled: true,
-      nextPageDisabled: false,
+      nextPageDisabled: Boolean,
       showMasonry: true,
       currentBreed: {},
       selectedBreed: {},
       breeds: [],
+      breedsCount:1,
       limits: [
         { text: "Limit: ", value: 5 },
         { text: "Limit: ", value: 10 },
@@ -177,6 +187,11 @@ export default {
   },
   created() {
     this.loadBreeds();
+  },
+  mounted(){
+    this.setPages();
+    console.log('mounted current page: ', this.currentPage)
+    console.log('npd: ', this.nextPageDisabled)
   },
   methods: {
     goBack() {
@@ -197,7 +212,7 @@ export default {
         let response = await axios.get("https://api.thecatapi.com/v1/breeds");
         this.breeds = response.data; // the response is an Array, so just use the first item as the Image
         this.mainStore.loading = false;
-        console.log(this.breeds);
+        console.log('breeds: ',this.breeds);
       } catch (error) {
         console.log(err);
       }
@@ -213,7 +228,7 @@ export default {
           `https://api.thecatapi.com/v1/images/search?breed_ids=${id}`
         );
         this.selectedBreed = response.data[0]; // the response is an Array, so just use the first item as the Image
-        console.log("here", this.selectedBreed);
+        console.log("breed: ", this.selectedBreed);
         this.mainStore.loading = false;
       } catch (error) {
         console.log(err);
@@ -221,13 +236,17 @@ export default {
     },
 
     setPages() {
-      let numberOfPages = Math.ceil(this.breeds.length / this.perPage);
+      this.pages = []
+      this.breedsCount = Object.keys(this.breedsByTitle).length
+      let numberOfPages = Math.ceil(this.breedsCount / this.perPage);
+      console.log('breeds count: ',this.breedsCount)
       for (let index = 1; index <= numberOfPages; index++) {
         this.pages.push(index);
       }
+      console.log('pages length: ',this.pages.length)
     },
     paginate(breeds) {
-      let page = this.mainStore.currentPage;
+      let page = this.currentPage;
       let perPage = this.perPage;
       let from = page * perPage - perPage;
       let to = page * perPage;
@@ -235,9 +254,13 @@ export default {
     },
   },
   watch: {
+    search(){
+      this.setPages()
+    },
     currentPage() {
       this.prevPageDisabled = this.currentPage == 1 ? true : false;
       this.nextPageDisabled = this.currentPage < this.pages.length ? false : true;
+      
     },
     currentLimit() {
       this.loadBreeds();
@@ -257,24 +280,30 @@ export default {
     },
   },
   computed: {
+    nextPageDisabled(){
+      return this.currentPage < this.pages.length ? false : true;
+    },
+    breedsByTitle() {
+      return this.sortedBreeds.filter(item => item.name.toLowerCase().indexOf(this.search.toLowerCase()) !== -1)
+    },
     showBreeds(){
       return this.mainStore.showBreeds;
     },
     currentPage() {
       return this.mainStore.currentPage;
     },
-    displayedBreeds() {
-      return this.paginate(this.breeds);
+    paginatedBreeds() {
+      return this.paginate(this.breedsByTitle);
     },
     sortedBreeds() {
       switch (this.currentSorting) {
         case "desc":
-          return this.displayedBreeds.sort((a, b) => {
+          return this.breeds.sort((a, b) => {
             if (a.name < b.name) return -1;
             if (a.name > b.name) return 1;
           });
         case "asc":
-          return this.displayedBreeds.sort((a, b) => {
+          return this.breeds.sort((a, b) => {
             if (a.name < b.name) return 1;
             if (a.name > b.name) return -1;
           });
@@ -286,6 +315,106 @@ export default {
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@200&display=swap");
+
+.form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+form.search-form {
+  position: relative;
+  width: 33vw;
+  padding: 0;
+  height: 40px;
+}
+
+input[type="text"] {
+  position: relative;
+  width: 100%;
+  height: 40px;
+  padding-left: 15px;
+  border-color: transparent;
+  border-radius: 10px;
+  font-family: "Jost", sans-serif;
+  font-weight: 200;
+  color: #1d1d1d;
+}
+
+input[type="text"]:hover {
+  border: 2px solid #fbe0dc;
+}
+
+input[type="text"]:focus {
+  border: 2px solid #ff868e;
+  outline: #ff868e;
+}
+
+.search-submit {
+  position: absolute;
+  right: 0.5vw;
+  top: 5px;
+  width: 30px;
+  height: 30px;
+  background-image: url("../assets/search.svg");
+  background-repeat: no-repeat;
+  background-color: #fbe0dc;
+  background-position: center;
+  border-color: transparent;
+  border-radius: 10px;
+}
+
+.search-submit:hover {
+  background-color: #ff868e;
+  background-image: url("../assets/search-hover.svg");
+}
+
+button.links {
+  background-color: #fff;
+  border-radius: 10px;
+  border-color: transparent;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+button.links:hover {
+  background-color: #fbe0dc;
+}
+
+button.links:active {
+  background-color: #ff868e;
+}
+
+.smile-button {
+  background-image: url("../assets/smile-hover.svg");
+}
+
+.smile-button:active {
+  background-image: url("../assets/smile-active.svg");
+}
+
+.heart-button {
+  background-image: url("../assets/heart-hover.svg");
+}
+
+.heart-button:active {
+  background-image: url("../assets/heart-active.svg");
+}
+
+.nosmile-button {
+  background-image: url("../assets/nosmile-hover.svg");
+}
+
+.nosmile-button:active {
+  background-image: url("../assets/nosmile-active.svg");
+}
+
+
 .container-voting {
   padding: 20px 0 !important;
   height: 90vh;
