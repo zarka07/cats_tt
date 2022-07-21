@@ -7,6 +7,7 @@ export const MAINstore = defineStore('mainStore',{
       currentPage: 1,
       loading: true,
       showBreeds: true,
+      showModal: false,
     }
   },
 })

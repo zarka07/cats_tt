@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
+    
     <div class="row">
       <div class="left">
         <div class="logo">
@@ -33,6 +34,7 @@
       </div>
     </div>
   </div>
+  <Modal v-show="this.mainStore.showModal" />
 </template>
 
 <script>
@@ -40,6 +42,7 @@ import girlpet from "../components/Girl-pet.vue";
 import voting from "../components/Voting.vue";
 import breeds from "../components/Breeds.vue";
 import gallery from "../components/Gallery.vue";
+import Modal from '../components/Modal.vue';
 import { MAINstore } from "../store/mainStore";
 export default {
   setup(){
@@ -49,7 +52,7 @@ export default {
     }
   },
   name: "HomeView",
-  components: { girlpet, voting, breeds, gallery },
+  components: { girlpet, voting, breeds, gallery, Modal },
   data() {
     return {
       currentTab: this.mainStore.currentTab,
@@ -179,4 +182,13 @@ button.api-button:active {
   padding: 0;
   height: 100vh;
 }
+
+/* ._modal{
+  width:100vw;
+  height:100vh;
+  text-align: center;
+  background-color: rgba(29, 29, 29, 0.6);
+  opacity: .8;
+  overflow:hidden;
+} */
 </style>
