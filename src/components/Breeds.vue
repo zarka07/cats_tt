@@ -1,13 +1,13 @@
 <template>
-  <div class="container-voting">
+  <div class="container-breeds">
     <div class="row form-row">
-    <form class="search-form">
-      <input type="text" placeholder="Search for breeds by name" v-model="search"/>
-      <div class="search-submit"></div>
-    </form>
-    <button class="links smile-button" type="button"></button>
-    <button class="links heart-button" type="button"></button>
-    <button class="links nosmile-button" type="button"></button>
+      <form class="search-form">
+        <input type="text" placeholder="Search for breeds by name" v-model="search" />
+        <div class="search-submit"></div>
+      </form>
+      <button class="links smile-button" type="button"></button>
+      <button class="links heart-button" type="button"></button>
+      <button class="links nosmile-button" type="button"></button>
     </div>
 
     <div class="row content-row">
@@ -16,8 +16,8 @@
         <div class="current-tab" v-show="showMasonry">
           <button type="submit" class="back-button" value="" @click="goBack()"></button>
           <div class="tab-name">BREEDS</div>
-          
-            <form>
+
+          <form>
             <select
               class="selectBreed"
               aria-label="All breeds"
@@ -26,31 +26,39 @@
               name="Breeds"
               id="breeds"
             >
-              <option value="" selected>All Breeds:</option>
-                <option v-for="item in breeds" :key="item" :value="item">
-                  {{ item.name }}
-                </option>
-              </select>
-            </form>
+              <option value="" disabled selected>All Breeds:</option>
+              <option v-for="item in breeds" :key="item" :value="item">
+                {{ item.name }}
+              </option>
+            </select>
+          </form>
 
-            <form style="width: 8vw; margin-left: 5px">
-              <select
-                class="selectBreed"
-                aria-label="Select limit"
-                v-model="perPage"
-                title="Limit"
-                name="Limit"
-                id="limit"
-              >
-                <option value="" disabled selected>Limit:</option>
-                <option v-for="item in limits" :key="item" :value="item.value">
-                  {{ item.text }}{{ item.value }}
-                </option>
-              </select>
-            </form>
+          <form style="width: 8vw; margin-left: 5px">
+            <select
+              class="selectBreed"
+              aria-label="Select limit"
+              v-model="perPage"
+              title="Limit"
+              name="Limit"
+              id="limit"
+            >
+              <option value="" disabled selected>Limit:</option>
+              <option v-for="item in limits" :key="item" :value="item.value">
+                {{ item.text }}{{ item.value }}
+              </option>
+            </select>
+          </form>
 
-            <button type="button" class="sort sort-up" @click="currentSorting = 'asc'"></button>
-            <button type="button" class="sort sort-down" @click="currentSorting = 'desc'"></button>
+          <button
+            type="button"
+            class="sort sort-up"
+            @click="currentSorting = 'asc'"
+          ></button>
+          <button
+            type="button"
+            class="sort sort-down"
+            @click="currentSorting = 'desc'"
+          ></button>
         </div>
 
         <div class="wall" v-if="showMasonry">
@@ -61,23 +69,18 @@
             :gap="8"
           >
             <template #default="{ item }">
-              <div class="image">
-                <img
-                  @mouseover="() => (visibleHover = item.id)"
-                  @mouseleave="() => (visibleHover = null)"
-                  :src="item.image.url"
-                  :alt="item.id"
-                  :style="{
+              <div class="container-image">
+                <img class="_image" :src="item.image.url" :alt="item.id" />
+                <div class="middle">
+                  <div class="_text">{{ item.name }}</div>
+                </div>
+                <!-- :style="{
                     width: 180 + 'px',
                     height: 'auto',
                     borderRadius: 10 + 'px',
-                  }"
-                />
-                <div v-if="visibleHover == item.id" class="description">
-                  <div class="hover-breed-name">{{ item.name }}</div>
-                </div>
-
-                <!--  -->
+                  }" -->
+                <!-- @mouseover="() => (visibleHover = item.id)"
+                  @mouseleave="() => (visibleHover = null)" v-if="visibleHover == item.id" -->
               </div>
             </template>
           </masonry-wall>
@@ -121,25 +124,44 @@
 
         <div class="selected-breed" v-else>
           <div class="current-breed-tab">
-            <button type="submit" class="back-button" value="" @click="goBackToManosry()"></button>
+            <button
+              type="submit"
+              class="back-button"
+              value=""
+              @click="goBackToManosry()"
+            ></button>
             <div class="breed-name">BREEDS</div>
-              <div class="breed-id">
-                {{selectedBreed.breeds[0].name}}
-              </div>
+            <div class="breed-id">
+              {{ selectedBreed.breeds[0].name }}
+            </div>
           </div>
-          <img class="selected-breed-image" :src="selectedBreed.url" :alt="selectedBreed.id" />
+          <img
+            class="selected-breed-image"
+            :src="selectedBreed.url"
+            :alt="selectedBreed.id"
+          />
           <div class="current-breed-description">
-            <h4 class="description-breed-name">{{selectedBreed.breeds[0].name}}</h4>
+            <h4 class="description-breed-name">{{ selectedBreed.breeds[0].name }}</h4>
             <!-- <h6 class="description-breed-country">{{selectedBreed.breeds[0].origin}}</h6> -->
             <div class="description-row">
               <div class="col-5">
                 <div><b>Temperament:</b></div>
-                <div><span>{{selectedBreed.breeds[0].temperament}}</span></div>
+                <div>
+                  <span>{{ selectedBreed.breeds[0].temperament }}</span>
+                </div>
               </div>
               <div class="col-5">
-                <div><b>Origin: </b><span>{{selectedBreed.breeds[0].origin}}</span></div>
-                <div><b>Weight: </b><span>{{selectedBreed.breeds[0].weight.metric}} kgs</span></div>
-                <div><b>Life span: </b><span>{{selectedBreed.breeds[0].life_span}} years</span></div>
+                <div>
+                  <b>Origin: </b><span>{{ selectedBreed.breeds[0].origin }}</span>
+                </div>
+                <div>
+                  <b>Weight: </b
+                  ><span>{{ selectedBreed.breeds[0].weight.metric }} kgs</span>
+                </div>
+                <div>
+                  <b>Life span: </b
+                  ><span>{{ selectedBreed.breeds[0].life_span }} years</span>
+                </div>
               </div>
             </div>
           </div>
@@ -165,7 +187,7 @@ export default {
   },
   data() {
     return {
-      search: '',
+      search: "",
       currentSorting: "desc",
       visibleHover: null,
       prevPageDisabled: true,
@@ -174,7 +196,7 @@ export default {
       currentBreed: {},
       selectedBreed: {},
       breeds: [],
-      breedsCount:1,
+      breedsCount: 1,
       limits: [
         { text: "Limit: ", value: 5 },
         { text: "Limit: ", value: 10 },
@@ -188,7 +210,7 @@ export default {
   created() {
     this.loadBreeds();
   },
-  mounted(){
+  mounted() {
     this.setPages();
   },
   methods: {
@@ -197,9 +219,9 @@ export default {
       this.$router.go(0);
     },
 
-    goBackToManosry(){
+    goBackToManosry() {
       this.showMasonry = true;
-      this.currentBreed = ""
+      this.currentBreed = "";
     },
 
     async loadBreeds() {
@@ -210,9 +232,8 @@ export default {
         let response = await axios.get("https://api.thecatapi.com/v1/breeds");
         this.breeds = response.data; // the response is an Array, so just use the first item as the Image
         this.mainStore.loading = false;
-        console.log('breeds: ',this.breeds);
       } catch (error) {
-        console.log(err);
+        console.log(error);
       }
     },
 
@@ -226,18 +247,17 @@ export default {
           `https://api.thecatapi.com/v1/images/search?breed_ids=${id}`
         );
         this.selectedBreed = response.data[0]; // the response is an Array, so just use the first item as the Image
-        console.log("breed: ", this.selectedBreed);
         this.mainStore.loading = false;
       } catch (error) {
-        console.log(err);
+        console.log(error);
       }
     },
 
     setPages() {
-      this.pages = []
-      this.breedsCount = Object.keys(this.breedsByTitle).length
+      this.pages = [];
+      this.breedsCount = Object.keys(this.breedsByTitle).length;
       let numberOfPages = Math.ceil(this.breedsCount / this.perPage);
-      console.log('breeds count: ',this.breedsCount)
+      console.log("breeds count: ", this.breedsCount);
       for (let index = 1; index <= numberOfPages; index++) {
         this.pages.push(index);
       }
@@ -251,13 +271,12 @@ export default {
     },
   },
   watch: {
-    search(){
-      this.setPages()
+    search() {
+      this.setPages();
     },
     currentPage() {
       this.prevPageDisabled = this.currentPage == 1 ? true : false;
       this.nextPageDisabled = this.currentPage < this.pages.length ? false : true;
-      
     },
     currentLimit() {
       this.loadBreeds();
@@ -267,7 +286,6 @@ export default {
         //this.loadBreeds();
         this.showMasonry = true;
       } else {
-
         this.loadBreed();
         this.showMasonry = false;
       }
@@ -277,13 +295,15 @@ export default {
     },
   },
   computed: {
-    nextPageDisabled(){
+    nextPageDisabled() {
       return this.currentPage < this.pages.length ? false : true;
     },
     breedsByTitle() {
-      return this.sortedBreeds.filter(item => item.name.toLowerCase().indexOf(this.search.toLowerCase()) !== -1)
+      return this.sortedBreeds.filter(
+        (item) => item.name.toLowerCase().indexOf(this.search.toLowerCase()) !== -1
+      );
     },
-    showBreeds(){
+    showBreeds() {
       return this.mainStore.showBreeds;
     },
     currentPage() {
@@ -306,9 +326,9 @@ export default {
           });
       }
     },
-    prevShevronDisabled(){
-      return '../assets/prev-shevron-disabled.svg'
-    }
+    prevShevronDisabled() {
+      return "../assets/prev-shevron-disabled.svg";
+    },
   },
 };
 </script>
@@ -316,7 +336,6 @@ export default {
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@200&display=swap");
 .container-voting {
-  padding: 20px 0 !important;
   height: 90vh;
   width: 100%;
 }
@@ -435,10 +454,10 @@ button.links:active {
   /* align-items: flex-start; */
 }
 
-.current-tab{
+.current-tab {
   display: flex;
   justify-content: space-between;
-} 
+}
 
 button.back-button {
   background-image: url("../assets/arrow-left.svg");
@@ -467,7 +486,7 @@ div.tab-name {
   border-radius: 10px;
   height: 30px;
   width: 140px;
-  color: #FFF;
+  color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -537,11 +556,14 @@ button.sort-down:hover {
   background-image: url("../assets/sortDown-hover.svg");
 }
 
-
 .wall {
   flex-wrap: wrap;
   margin: 10px 0 10px 0;
   position: relative;
+}
+
+.masonry-wall {
+  min-height: 68vh;
 }
 
 nav.breeds-nav {
@@ -576,12 +598,12 @@ button.next-page:hover {
   background-position: 60px;
   text-align: left;
   padding-left: 25px;
-  color: #FFF;
-  background-color: #FF868E!important;
+  color: #fff;
+  background-color: #ff868e !important;
 }
 
-button.next-page:disabled{
-  background-image: url("../assets/next-shevron-disabled.svg")!important;
+button.next-page:disabled {
+  background-image: url("../assets/next-shevron-disabled.svg") !important;
   background-position: 60px;
 }
 
@@ -597,12 +619,12 @@ button.prev-page:hover {
   background-position: 12px;
   text-align: right;
   padding-left: 25px;
-  color: #FFF;
-  background-color: #FF868E!important;
+  color: #fff;
+  background-color: #ff868e !important;
 }
 
-button.prev-page:disabled{
-  background-image: url("../assets/prev-shevron-disabled.svg")!important;
+button.prev-page:disabled {
+  background-image: url("../assets/prev-shevron-disabled.svg") !important;
   background-position: 10px;
 }
 
@@ -618,60 +640,86 @@ button.prev-page:disabled{
   margin: 10px 0 0 0;
 }
 
-.image {
+.container-image {
   position: relative;
-}
-
-div.description {
-  background-color: rgba(255, 134, 142, 0.6);
   width: 180px;
   height: 100%;
   border-radius: 10px;
-  position: absolute;
-  top: 0;
+}
+
+img._image {
+  opacity: 1;
+  display: block;
+  transition: 0.5s ease;
+  backface-visibility: hidden;
+  width: 180px;
+  height: auto;
+  border-radius: 10px;
+}
+
+.middle {
+  background-color: rgba(255, 134, 142, 0.6);
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
+  transition: 0.5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
 }
 
-.current-breed-tab{
-  display: flex;
-  justify-content:flex-start;
+.container-image:hover ._image {
+  opacity: 0.3;
+  color: #ff868e;
 }
 
-.hover-breed-name {
-  margin-top: 10px;
-  text-align: center;
-  background-color: #FFF;
+.container-image:hover .middle {
+  opacity: 1;
+}
+
+._text {
+  background-color: #fff;
   border-radius: 10px;
-  height: 30px;
+  min-height: 30px;
+  height: auto;
   width: 140px;
-  color: #FF868E;
+  color: #ff868e;
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: "Jost", sans-serif;
   font-weight: 500;
   font-size: 15px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.current-breed-tab {
+  display: flex;
+  justify-content: flex-start;
 }
 
 .selected-breed-image {
-  width:100%;
-  height:auto;
-  margin-top:10px;
+  width: 100%;
+  height: auto;
+  margin-top: 10px;
   border-radius: 10px;
   border-color: transparent;
 }
 
-.breed-name{
+.breed-name {
   margin-top: 10px;
   text-align: center;
-  background-color: #FBE0DC;
+  background-color: #fbe0dc;
   border-radius: 10px;
   height: 30px;
   width: 140px;
-  color: #FF868E;
+  color: #ff868e;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -681,7 +729,7 @@ div.description {
   margin-left: 10px;
 }
 
-.breed-id{
+.breed-id {
   margin-top: 10px;
   margin-left: 10px;
   text-align: center;
@@ -697,48 +745,48 @@ div.description {
   font-family: "Jost", sans-serif;
   font-weight: 500;
   font-size: 15px;
-  padding:10px;
+  padding: 10px;
 }
 
-.current-breed-description{
-  width:100%;
-  min-height:150px;
-  height:auto;
-  margin-top:30px;
+.current-breed-description {
+  width: 100%;
+  min-height: 150px;
+  height: auto;
+  margin-top: 30px;
   margin-bottom: 30px;
   border-radius: 10px;
-  border: 2px solid #FBE0DC;
+  border: 2px solid #fbe0dc;
   font-family: "Jost", sans-serif;
   font-weight: 500;
   position: relative;
 }
 
-h4.description-breed-name{
+h4.description-breed-name {
   position: absolute;
-  left:22%;
-  top:-18px;
-  background-color: #FFF;
-  border:2px solid transparent;
-  width:300px;
+  left: 22%;
+  top: -18px;
+  background-color: #fff;
+  border: 2px solid transparent;
+  width: 300px;
 }
 
-h6.description-breed-country{
-  color: #1D1D1D;
+h6.description-breed-country {
+  color: #1d1d1d;
 }
 
-.description-row{
+.description-row {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
   margin-top: 50px;
 }
 
-.col-5{
+.col-5 {
   text-align: left;
   font-size: 14px;
 }
 
-span{
-  color:#8C8C8C;
+span {
+  color: #8c8c8c;
 }
 </style>
