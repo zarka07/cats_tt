@@ -1,6 +1,8 @@
 <template>
-  <div class="container-breeds">
-    <div class="row form-row">
+  <!-- <div class="container-breeds"> -->
+    <search-panel></search-panel>
+    
+    <!-- <div class="form-row">
       <form class="search-form">
         <input type="text" placeholder="Search for breeds by name" v-model="search" />
         <div class="search-submit"></div>
@@ -8,11 +10,11 @@
       <button class="links smile-button" type="button"></button>
       <button class="links heart-button" type="button"></button>
       <button class="links nosmile-button" type="button"></button>
-    </div>
+    </div> -->
 
-    <div class="row content-row">
+    <div class="content-row">
       <Loader v-if="this.mainStore.loading" />
-      <div v-else>
+      <div class="current-content" v-else>
         <div class="current-tab" v-show="showMasonry">
           <button type="submit" class="back-button" value="" @click="goBack()"></button>
           <div class="tab-name">BREEDS</div>
@@ -168,7 +170,7 @@
         </div>
       </div>
     </div>
-  </div>
+  <!-- </div> -->
 </template>
 
 <script>
@@ -176,7 +178,9 @@ import Loader from "../components/Loader.vue";
 import SearchPanel from "../components/SearchPanel.vue";
 import { MAINstore } from "../store/mainStore";
 import axios from "axios";
+import getBreeds from "../api/getBreeds";
 export default {
+  mixins: [getBreeds],
   name: "tab-breeds",
   components: { SearchPanel, Loader },
   setup() {
@@ -193,9 +197,8 @@ export default {
       prevPageDisabled: true,
       nextPageDisabled: Boolean,
       showMasonry: true,
-      currentBreed: {},
+      currentBreed: "",
       selectedBreed: {},
-      breeds: [],
       breedsCount: 1,
       limits: [
         { text: "Limit: ", value: 5 },
@@ -215,26 +218,12 @@ export default {
   },
   methods: {
     goBack() {
-      this.mainStore.currentTab = "Girlpet";
-      this.$router.go(0);
+      this.$router.go(-1);
     },
 
     goBackToManosry() {
       this.showMasonry = true;
       this.currentBreed = "";
-    },
-
-    async loadBreeds() {
-      try {
-        this.mainStore.loading = true;
-        axios.defaults.headers.common["x-api-key"] =
-          "bbf7ce2f-68fc-4879-8dda-4139a8c2823b"; // Replace this with your API Key
-        let response = await axios.get("https://api.thecatapi.com/v1/breeds");
-        this.breeds = response.data; // the response is an Array, so just use the first item as the Image
-        this.mainStore.loading = false;
-      } catch (error) {
-        console.log(error);
-      }
     },
 
     async loadBreed() {
@@ -295,6 +284,9 @@ export default {
     },
   },
   computed: {
+    breeds() {
+      return this.mainStore.breeds;
+    },
     nextPageDisabled() {
       return this.currentPage < this.pages.length ? false : true;
     },
@@ -335,123 +327,29 @@ export default {
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@200&display=swap");
-.container-voting {
-  height: 90vh;
+@import url("../css/search-panel-with-icons.css");
+@import url("../css/back-button.css");
+@import url("../css/manosry-wall.css");
+@import url("../css/pagination.css");
+/* .container-breeds {
+  min-height: 85vh;
   width: 100%;
-}
+} */
 
-.row {
-  width: auto;
-}
-
-.form-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-form.search-form {
-  position: relative;
-  width: 33vw;
-  padding: 0;
-  height: 40px;
-}
-
-input[type="text"] {
-  position: relative;
+.current-content {
   width: 100%;
-  height: 40px;
-  padding-left: 15px;
-  border-color: transparent;
-  border-radius: 10px;
-  font-family: "Jost", sans-serif;
-  font-weight: 200;
-  color: #1d1d1d;
-}
-
-input[type="text"]:hover {
-  border: 2px solid #fbe0dc;
-}
-
-input[type="text"]:focus {
-  border: 2px solid #ff868e;
-  outline: #ff868e;
-}
-
-.search-submit {
-  position: absolute;
-  right: 0.5vw;
-  top: 5px;
-  width: 30px;
-  height: 30px;
-  background-image: url("../assets/search.svg");
-  background-repeat: no-repeat;
-  background-color: #fbe0dc;
-  background-position: center;
-  border-color: transparent;
-  border-radius: 10px;
-}
-
-.search-submit:hover {
-  background-color: #ff868e;
-  background-image: url("../assets/search-hover.svg");
-}
-
-button.links {
-  background-color: #fff;
-  border-radius: 10px;
-  border-color: transparent;
-  position: relative;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-button.links:hover {
-  background-color: #fbe0dc;
-}
-
-button.links:active {
-  background-color: #ff868e;
-}
-
-.smile-button {
-  background-image: url("../assets/smile-hover.svg");
-}
-
-.smile-button:active {
-  background-image: url("../assets/smile-active.svg");
-}
-
-.heart-button {
-  background-image: url("../assets/heart-hover.svg");
-}
-
-.heart-button:active {
-  background-image: url("../assets/heart-active.svg");
-}
-
-.nosmile-button {
-  background-image: url("../assets/nosmile-hover.svg");
-}
-
-.nosmile-button:active {
-  background-image: url("../assets/nosmile-active.svg");
+  padding: 10px;
 }
 
 .content-row {
   margin-top: 10px;
-  width: 104%;
+  width: 100%;
   min-height: 85vh;
   background-color: #fff;
   border-radius: 10px;
   padding: 0;
   display: flex;
   justify-content: space-evenly;
-  /* align-items: flex-start; */
 }
 
 .current-tab {
@@ -459,28 +357,7 @@ button.links:active {
   justify-content: space-between;
 }
 
-button.back-button {
-  background-image: url("../assets/arrow-left.svg");
-  color: #ff868e;
-  background-color: #fbe0dc;
-  border-radius: 10px;
-  border-color: transparent;
-  position: relative;
-  width: 30px;
-  height: 30px;
-  padding: 0;
-  background-repeat: no-repeat;
-  background-position: center;
-  margin-top: 10px;
-}
-
-button.back-button:hover {
-  background-color: #ff868e;
-  background-image: url("../assets/arrow-left-hover.svg");
-}
-
 div.tab-name {
-  margin-top: 10px;
   text-align: center;
   background-color: #ff868e;
   border-radius: 10px;
@@ -493,14 +370,6 @@ div.tab-name {
   font-family: "Jost", sans-serif;
   font-weight: 500;
   font-size: 15px;
-}
-
-form {
-  position: relative;
-  width: 12vw;
-  padding: 10px 0;
-  height: 30px;
-  /* background-color: #FBE0DC; */
 }
 
 select {
@@ -518,25 +387,12 @@ select {
   background-color: #f8f8f7;
 }
 
-/* select:hover {
-  border: 2px solid #fbe0dc;
-}
-
-select:focus {
-  border: 2px solid #ff868e;
-}
-
-select:checked {
-  border: 2px solid #ff868e;
-} */
-
 button.sort {
   background-repeat: no-repeat;
   background-position: center;
   width: 30px;
   height: 30px;
   border-radius: 10px;
-  margin-top: 10px;
   border-color: transparent;
 }
 
@@ -556,147 +412,11 @@ button.sort-down:hover {
   background-image: url("../assets/sortDown-hover.svg");
 }
 
-.wall {
-  flex-wrap: wrap;
-  margin: 10px 0 10px 0;
-  position: relative;
-}
-
-.masonry-wall {
-  min-height: 68vh;
-}
-
-nav.breeds-nav {
-  display: inline-block;
-}
-
-button.page {
-  margin: 0 10px 0 10px;
-  background: #fbe0dc;
-  color: #ff868e;
-  font-family: "Jost", sans-serif;
-  font-weight: 500;
-  font-size: 12px;
-  font-weight: 500;
-  padding: 0.2rem 0.5rem;
-  background-repeat: no-repeat;
-  width: 90px;
-  height: 30px;
-  border-radius: 10px;
-  border-color: transparent;
-}
-
-button.next-page {
-  background-image: url("../assets/next-shevron.svg");
-  background-position: 65px;
-  text-align: left;
-  padding-left: 25px;
-}
-
-button.next-page:hover {
-  background-image: url("../assets/next-shevron-hover.svg");
-  background-position: 60px;
-  text-align: left;
-  padding-left: 25px;
-  color: #fff;
-  background-color: #ff868e !important;
-}
-
-button.next-page:disabled {
-  background-image: url("../assets/next-shevron-disabled.svg") !important;
-  background-position: 60px;
-}
-
-button.prev-page {
-  background-image: url("../assets/prev-shevron.svg");
-  background-position: 15px;
-  text-align: right;
-  padding-right: 25px;
-}
-
-button.prev-page:hover {
-  background-image: url("../assets/prev-shevron-hover.svg");
-  background-position: 12px;
-  text-align: right;
-  padding-left: 25px;
-  color: #fff;
-  background-color: #ff868e !important;
-}
-
-button.prev-page:disabled {
-  background-image: url("../assets/prev-shevron-disabled.svg") !important;
-  background-position: 10px;
-}
-
-.offset {
-  width: 500px !important;
-  margin: 20px auto;
-}
-
-.pagination {
-  align-items: center;
-  justify-content: center;
-  padding-left: 0;
-  margin: 10px 0 0 0;
-}
-
 .container-image {
   position: relative;
   width: 180px;
   height: 100%;
   border-radius: 10px;
-}
-
-img._image {
-  opacity: 1;
-  display: block;
-  transition: 0.5s ease;
-  backface-visibility: hidden;
-  width: 180px;
-  height: auto;
-  border-radius: 10px;
-}
-
-.middle {
-  background-color: rgba(255, 134, 142, 0.6);
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  transition: 0.5s ease;
-  opacity: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-}
-
-.container-image:hover ._image {
-  opacity: 0.3;
-  color: #ff868e;
-}
-
-.container-image:hover .middle {
-  opacity: 1;
-}
-
-._text {
-  background-color: #fff;
-  border-radius: 10px;
-  min-height: 30px;
-  height: auto;
-  width: 140px;
-  color: #ff868e;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: "Jost", sans-serif;
-  font-weight: 500;
-  font-size: 15px;
-  margin-bottom: 15px;
 }
 
 .current-breed-tab {
@@ -705,15 +425,14 @@ img._image {
 }
 
 .selected-breed-image {
+  margin-top: 10px;
   width: 100%;
   height: auto;
-  margin-top: 10px;
   border-radius: 10px;
   border-color: transparent;
 }
 
 .breed-name {
-  margin-top: 10px;
   text-align: center;
   background-color: #fbe0dc;
   border-radius: 10px;
@@ -730,7 +449,6 @@ img._image {
 }
 
 .breed-id {
-  margin-top: 10px;
   margin-left: 10px;
   text-align: center;
   background-color: #ff868e;

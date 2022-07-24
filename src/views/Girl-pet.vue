@@ -11,18 +11,18 @@ export default {
 </script>
 
 <style scoped>
-.right-part{
+.right-part {
   background-color: #fbe0dc;
   border-radius: 20px;
-  margin: 20px;
-  height: 90vh;
+  height: 100%;
+  position: relative;
 }
 
 .bg-image {
   position: absolute;
-  width: 53%;
+  right: -1.5vw;
+  top: 10vh;
+  width: 52vw;
   height: 90%;
-  right: 16px;
-  top: 5px;
 }
 </style>

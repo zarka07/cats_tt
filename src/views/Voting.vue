@@ -1,10 +1,12 @@
 <template>
-  <div class="container-voting">
+  <!-- <div class="container-voting"> -->
     <search-panel></search-panel>
-    <div class="row content-row">
-      <button type="submit" class="back-button" value="" @click="goBack()"></button>
-      <div class="tab-name"><span>VOTING</span></div>
-    </div>
+    <div class="content-row">
+      <div class="current-content">
+        <button type="submit" class="back-button" value="" @click="goBack()"></button>
+        <div class="tab-name"><span>VOTING</span></div>
+      </div>
+    <!-- </div> -->
   </div>
 </template>
 
@@ -22,9 +24,7 @@ export default {
   name: "tab-voting",
   methods: {
     goBack() {
-      console.log(this.mainStore.currentTab);
-      this.mainStore.currentTab = "Girlpet";
-      this.$router.go(0);
+      this.$router.go(-1);
     },
   },
 };
@@ -32,23 +32,10 @@ export default {
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@200&display=swap");
-.container-voting {
-  /* display: block; */
-  padding: 20px 0 !important;
-  height: 90vh;
+/* .container-voting {
+  height: 85vh;
   width: 100%;
-}
-
-.row {
-  width: auto;
-}
-
-.input-group {
-  width: 50%;
-  display: flex;
-  justify-content: flex-start;
-  flex-wrap: nowrap;
-}
+} */
 
 .form-control {
   color: #1d1d1d;
@@ -56,14 +43,19 @@ export default {
 
 .content-row {
   margin-top: 10px;
-  width: 104%;
-  height: 80vh;
+  width: 100%;
+  min-height: 85vh;
   background-color: #fff;
   border-radius: 10px;
   padding: 0;
   display: flex;
-  justify-content: flex-start;
-  gap: 10px;
+}
+
+.current-content{
+padding: 10px;
+display: flex;
+align-items: flex-start;
+justify-content: flex-start;
 }
 
 button.back-button {
@@ -78,7 +70,7 @@ button.back-button {
   padding: 0;
   background-repeat: no-repeat;
   background-position: center;
-  margin: 10px 0 0 12px;
+  margin-right:10px;
 }
 
 button.back-button:hover {
@@ -87,7 +79,6 @@ button.back-button:hover {
 }
 
 div.tab-name {
-  margin-top: 10px;
   text-align: center;
   background-color: #ff868e;
   border-radius: 10px;
