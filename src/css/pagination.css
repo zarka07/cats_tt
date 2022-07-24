@@ -1,0 +1,73 @@
+nav.breeds-nav {
+    display: inline-block;
+  }
+  
+  button.page {
+    margin: 0 10px 0 10px;
+    background: #fbe0dc;
+    color: #ff868e;
+    font-family: "Jost", sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 0.2rem 0.5rem;
+    background-repeat: no-repeat;
+    width: 90px;
+    height: 30px;
+    border-radius: 10px;
+    border-color: transparent;
+  }
+  
+  button.next-page {
+    background-image: url("../assets/next-shevron.svg");
+    background-position: 65px;
+    text-align: left;
+    padding-left: 25px;
+  }
+  
+  button.next-page:hover {
+    background-image: url("../assets/next-shevron-hover.svg");
+    background-position: 60px;
+    text-align: left;
+    padding-left: 25px;
+    color: #fff;
+    background-color: #ff868e !important;
+  }
+  
+  button.next-page:disabled {
+    background-image: url("../assets/next-shevron-disabled.svg") !important;
+    background-position: 60px;
+  }
+  
+  button.prev-page {
+    background-image: url("../assets/prev-shevron.svg");
+    background-position: 15px;
+    text-align: right;
+    padding-right: 25px;
+  }
+  
+  button.prev-page:hover {
+    background-image: url("../assets/prev-shevron-hover.svg");
+    background-position: 12px;
+    text-align: right;
+    padding-left: 25px;
+    color: #fff;
+    background-color: #ff868e !important;
+  }
+  
+  button.prev-page:disabled {
+    background-image: url("../assets/prev-shevron-disabled.svg") !important;
+    background-position: 10px;
+  }
+  
+  /* .offset {
+    width: 500px !important;
+    margin: 20px auto;
+  } */
+  
+  .pagination {
+    align-items: center;
+    justify-content: center;
+    padding-left: 0;
+    margin: 10px 0 0 0;
+  }

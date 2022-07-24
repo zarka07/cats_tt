@@ -1,0 +1,18 @@
+button.back-button {
+    background-image: url("../assets/arrow-left.svg");
+    color: #ff868e;
+    background-color: #fbe0dc;
+    border-radius: 10px;
+    border-color: transparent;
+    position: relative;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  
+  button.back-button:hover {
+    background-color: #ff868e;
+    background-image: url("../assets/arrow-left-hover.svg");
+  }
