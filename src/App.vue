@@ -15,8 +15,7 @@
             <div
               v-for="tab in tabs"
               :key="tab"
-              :class="['cart', { active: currentTab === tab.tabName }]"
-              @click="currentTab = tab.tabName"
+              class='cart'
             >
               <img :src="tab.tabImg" class="cart" alt="cart-image" /><br />
               <button type="button" class="api-button">
@@ -29,17 +28,15 @@
 
       <div class="right">
         <div class="_container">
-          <!-- <search-panel></search-panel> -->
           <router-view></router-view>
         </div>
       </div>
     </div>
   </div>
-  <Modal v-show="this.mainStore.showModal" />
+  <Modal v-if="this.mainStore.showModal" />
 </template>
 <script>
 import Modal from "../src/components/Modal.vue";
-// import SearchPanel from "../src/components/SearchPanel.vue";
 import { MAINstore } from "../src/store/mainStore";
 export default {
   setup() {
@@ -49,11 +46,9 @@ export default {
     };
   },
   name: "App",
-  components: { Modal,}, //SearchPanel },
+  components: { Modal },
   data() {
     return {
-      path: "",
-      currentTab: "Girlpet",
       tabs: [
         {
           tabName: "Voting",
@@ -73,16 +68,6 @@ export default {
       ],
     };
   },
-  methods: {
-    linkTo(payload) {
-      console.log(payload);
-    },
-  },
-  computed: {
-    // currentTabComponent: function () {
-    //   return this.currentTab.toLowerCase();
-    // },
-  },
 };
 </script>
 
@@ -92,7 +77,6 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  /* color: #2c3e50; */
   background-color: #f8f8f7;
   width: 100%;
   min-height: 100%;
@@ -121,7 +105,6 @@ nav a.router-link-exact-active {
   overflow: none;
 }
 ._row {
-  /* width: 100%; */
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;

@@ -2,33 +2,51 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Girlpet from '../views/Girl-pet.vue'
 
 const routes = [
-  
+
   {
     path: '/',
     name: 'girl-pet',
     component: Girlpet
   },
   {
-    path: '/breeds',
-    name: 'breeds',
-    component: () => import(/* webpackChunkName: "breeds" */ '../views/Breeds.vue')
+    path: '/home',
+    name: 'home',
+    component: () => import(/* webpackChunkName: "home" */ '../views/HomeView.vue'),
+    children: [
+      {
+        path: '/breeds',
+        name: 'breeds',
+        component: () => import(/* webpackChunkName: "breeds" */ '../views/Breeds.vue')
+      },
+      {
+        path: '/likes',
+        name: 'likes',
+        component: () => import(/* webpackChunkName: "likes" */ '../views/Likes.vue')
+      },
+      {
+        path: '/favorites',
+        name: 'favorites',
+        component: () => import(/* webpackChunkName: "favorites" */ '../views/Favorites.vue')
+      },
+      {
+        path: '/dislikes',
+        name: 'dislikes',
+        component: () => import(/* webpackChunkName: "dislikes" */ '../views/Dislikes.vue')
+      },
+      {
+        path: '/gallery',
+        name: 'gallery',
+        component: () => import(/* webpackChunkName: "gallery" */ '../views/Gallery.vue')
+      },
+      {
+        path: '/voting',
+        name: 'voting',
+        component: () => import(/* webpackChunkName: "voting" */ '../views/Voting.vue')
+      },
+    ]
   },
-  {
-    path: '/favorites',
-    name: 'favorites',
-    component: () => import(/* webpackChunkName: "favorites" */ '../views/Favorites.vue')
-  },
-  {
-    path: '/gallery',
-    name: 'gallery',
-    component: () => import(/* webpackChunkName: "gallery" */ '../views/Gallery.vue')
-  },
-  {
-    path: '/voting',
-    name: 'voting',
-    component: () => import(/* webpackChunkName: "voting" */ '../views/Voting.vue')
-  },
-  
+
+
 ]
 
 const router = createRouter({

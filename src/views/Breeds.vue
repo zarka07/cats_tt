@@ -1,17 +1,4 @@
 <template>
-  <!-- <div class="container-breeds"> -->
-    <search-panel></search-panel>
-    
-    <!-- <div class="form-row">
-      <form class="search-form">
-        <input type="text" placeholder="Search for breeds by name" v-model="search" />
-        <div class="search-submit"></div>
-      </form>
-      <button class="links smile-button" type="button"></button>
-      <button class="links heart-button" type="button"></button>
-      <button class="links nosmile-button" type="button"></button>
-    </div> -->
-
     <div class="content-row">
       <Loader v-if="this.mainStore.loading" />
       <div class="current-content" v-else>
@@ -76,13 +63,6 @@
                 <div class="middle">
                   <div class="_text">{{ item.name }}</div>
                 </div>
-                <!-- :style="{
-                    width: 180 + 'px',
-                    height: 'auto',
-                    borderRadius: 10 + 'px',
-                  }" -->
-                <!-- @mouseover="() => (visibleHover = item.id)"
-                  @mouseleave="() => (visibleHover = null)" v-if="visibleHover == item.id" -->
               </div>
             </template>
           </masonry-wall>
@@ -170,19 +150,17 @@
         </div>
       </div>
     </div>
-  <!-- </div> -->
 </template>
 
 <script>
 import Loader from "../components/Loader.vue";
-import SearchPanel from "../components/SearchPanel.vue";
 import { MAINstore } from "../store/mainStore";
 import axios from "axios";
 import getBreeds from "../api/getBreeds";
 export default {
   mixins: [getBreeds],
   name: "tab-breeds",
-  components: { SearchPanel, Loader },
+  components: { Loader },
   setup() {
     const mainStore = MAINstore();
     return {
@@ -231,11 +209,11 @@ export default {
       this.mainStore.loading = true;
       try {
         axios.defaults.headers.common["x-api-key"] =
-          "bbf7ce2f-68fc-4879-8dda-4139a8c2823b"; // Replace this with your API Key
+          "bbf7ce2f-68fc-4879-8dda-4139a8c2823b"; 
         let response = await axios.get(
           `https://api.thecatapi.com/v1/images/search?breed_ids=${id}`
         );
-        this.selectedBreed = response.data[0]; // the response is an Array, so just use the first item as the Image
+        this.selectedBreed = response.data[0];
         this.mainStore.loading = false;
       } catch (error) {
         console.log(error);
@@ -246,7 +224,6 @@ export default {
       this.pages = [];
       this.breedsCount = Object.keys(this.breedsByTitle).length;
       let numberOfPages = Math.ceil(this.breedsCount / this.perPage);
-      console.log("breeds count: ", this.breedsCount);
       for (let index = 1; index <= numberOfPages; index++) {
         this.pages.push(index);
       }

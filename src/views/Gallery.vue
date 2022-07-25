@@ -1,128 +1,107 @@
 <template>
-  <!-- <div class="container-gallery"> -->
-    <!-- <div class="form-row">
-      <form class="search-form">
-        <input
-          type="text"
-          placeholder="Search for images by name"
-          disabled
-          v-model="search"
-        />
-        <div class="search-submit"></div>
-      </form>
-      <button class="links smile-button" type="button"></button>
-      <button
-        class="links heart-button"
-        type="button"
-        @click="$emit('linkTo', 'favorites')"
-      ></button>
-      <button class="links nosmile-button" type="button"></button>
-    </div> -->
-    <search-panel></search-panel>
-    <div class="content-row">
-      <Loader v-if="this.mainStore.loading" />
-      <div class="current-content" v-else>
-        <div class="current-tab">
-          <button type="submit" class="back-button" value="" @click="goBack()"></button>
-          <div class="tab-name">GALLERY</div>
-          <button
-            type="button"
-            class="upload-button"
-            @click="this.mainStore.showModal = true"
-          >
-            UPLOAD
-          </button>
+  <div class="content-row">
+    <Loader v-if="this.mainStore.loading" />
+    <div class="current-content" v-else>
+      <div class="current-tab">
+        <button type="submit" class="back-button" value="" @click="goBack()"></button>
+        <div class="tab-name">GALLERY</div>
+        <button
+          type="button"
+          class="upload-button"
+          @click="this.mainStore.showModal = true"
+        >
+          UPLOAD
+        </button>
+      </div>
+
+      <div class="filters">
+        <div class="filters-row-st">
+          <form class="order-list">
+            <label for="Order">ORDER</label>
+            <select
+              class="select"
+              aria-label="Order"
+              v-model="currentSorting"
+              title="Order"
+              name="Order"
+              id="order"
+            >
+              <option v-for="item in sorting" :key="item" :value="item.value">
+                {{ item.type }}
+              </option>
+            </select>
+          </form>
+
+          <form class="type-list">
+            <label for="Type">TYPE</label>
+            <select
+              class="selectType"
+              aria-label="Type"
+              v-model="currentType"
+              title="Type"
+              name="Type"
+              id="type"
+            >
+              <option v-for="item in types" :key="item" :value="item.value">
+                {{ item.type }}
+              </option>
+            </select>
+          </form>
         </div>
 
-        <div class="filters">
-          <div class="filters-row-st">
-            <form class="order-list">
-              <label for="Order">ORDER</label>
-              <select
-                class="select"
-                aria-label="Order"
-                v-model="currentSorting"
-                title="Order"
-                name="Order"
-                id="order"
-              >
-                <option v-for="item in sorting" :key="item" :value="item.value">
-                  {{ item.type }}
-                </option>
-              </select>
-            </form>
+        <div class="filters-row-nd">
+          <form class="breed-list">
+            <label for="Breed">BREED</label>
+            <select
+              class="select"
+              aria-label="Breed"
+              v-model="currentBreed"
+              title="Breed"
+              name="Breed"
+              id="breed"
+            >
+              <option value="">All breads</option>
+              <option v-for="item in breeds" :key="item" :value="item.id">
+                {{ item.name }}
+              </option>
+            </select>
+          </form>
 
-            <form class="type-list">
-              <label for="Type">TYPE</label>
+          <div class="limit-reload">
+            <form class="limit-list">
+              <label for="Limit">LIMIT</label>
               <select
-                class="selectType"
-                aria-label="Type"
-                v-model="currentType"
-                title="Type"
-                name="Type"
-                id="type"
+                class="selectLimit"
+                aria-label="Limit"
+                v-model="currentLimit"
+                title="Limit"
+                name="Limit"
+                id="limit"
               >
-                <option v-for="item in types" :key="item" :value="item.value">
-                  {{ item.type }}
+                <option v-for="item in limits" :key="item" :value="item.value">
+                  {{ item.type }}{{ item.value }}
                 </option>
               </select>
             </form>
+            <button type="button" class="reload-button" @click="reload"></button>
           </div>
-
-          <div class="filters-row-nd">
-            <form class="breed-list">
-              <label for="Breed">BREED</label>
-              <select
-                class="select"
-                aria-label="Breed"
-                v-model="currentBreed"
-                title="Breed"
-                name="Breed"
-                id="breed"
-              >
-                <option value="">All breads</option>
-                <option v-for="item in breeds" :key="item" :value="item.id">
-                  {{ item.name }}
-                </option>
-              </select>
-            </form>
-
-            <div class="limit-reload">
-              <form class="limit-list">
-                <label for="Limit">LIMIT</label>
-                <select
-                  class="selectLimit"
-                  aria-label="Limit"
-                  v-model="currentLimit"
-                  title="Limit"
-                  name="Limit"
-                  id="limit"
-                >
-                  <option v-for="item in limits" :key="item" :value="item.value">
-                    {{ item.type }}{{ item.value }}
-                  </option>
-                </select>
-              </form>
-              <button type="button" class="reload-button" @click="reload"></button>
-            </div>
-          </div>
-        </div>
-
-        <div class="wall">
-          <masonry-wall :items="images" :ssr-columns="3" :column-width="180" :gap="8">
-            <template #default="{ item }">
-              <div class="container-image">
-                <img class="_image" :src="item.url" :alt="item.id" />
-                <div class="middle">
-                  <button type="button" class="_text" @click="setLike(item.id)"></button>
-                </div>
-              </div>
-            </template>
-          </masonry-wall>
         </div>
       </div>
+
+      <div class="wall">
+        <masonry-wall :items="images" :ssr-columns="3" :column-width="180" :gap="8">
+          <template #default="{ item }">
+            <div class="container-image">
+              <img class="_image" :src="item.url" :alt="item.id" />
+              <div class="middle">
+                <button type="button" class="_text" @click="setFavorite(item)"></button>
+              </div>
+            </div>
+          </template>
+        </masonry-wall>
+      </div>
     </div>
-  <!-- </div> -->
+  </div>
 </template>
 
 <script>
@@ -130,7 +109,7 @@ import { MAINstore } from "../store/mainStore";
 import Loader from "../components/Loader.vue";
 import getImages from "../api/getImages";
 import getBreeds from "../api/getBreeds";
-import SearchPanel from '../components/SearchPanel.vue';
+import SearchPanel from "../components/SearchPanel.vue";
 export default {
   mixins: [getImages, getBreeds],
   emits: ["linkTo"],
@@ -186,8 +165,13 @@ export default {
         this.currentLimit
       );
     },
-    setLike(id) {
-      this.mainStore.likes.push(id);
+    setFavorite(item) {
+      for (var i = 0; i < this.mainStore.favorites.length; i++) {
+        if (this.mainStore.favorites[i] === item) {
+          return false;
+        }
+      }
+      return this.mainStore.favorites.push(item);
     },
 
     // setPages() {
@@ -281,20 +265,9 @@ export default {
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@200&display=swap");
-@import url("../css/search-panel-with-icons.css");
 @import url("../css/back-button.css");
 @import url("../css/manosry-wall.css");
 @import url("../css/pagination.css");
-/* .container-gallery {
-  min-height: 85vh;
-  width: 100%;
-} */
-
-.current-content {
-  width: 100%;
-  padding: 10px;
-}
-
 .content-row {
   margin-top: 10px;
   width: 100%;
@@ -305,6 +278,13 @@ export default {
   display: flex;
   justify-content: space-evenly;
 }
+
+.current-content {
+  width: 100%;
+  padding: 10px;
+}
+
+
 
 .current-tab {
   display: flex;
@@ -469,5 +449,9 @@ button.reload-button:hover {
   color: #ff868e;
   margin-bottom: 0 !important;
   border-color: transparent;
+}
+
+._text:hover {
+  background-image: url("../assets/delete-heart.svg");
 }
 </style>

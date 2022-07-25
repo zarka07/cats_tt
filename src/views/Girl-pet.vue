@@ -14,7 +14,9 @@ export default {
 .right-part {
   background-color: #fbe0dc;
   border-radius: 20px;
-  height: 100%;
+  height: 95vh;
+  width:100%;
+  /* overflow: hidden; */
   position: relative;
 }
 

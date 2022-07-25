@@ -10,7 +10,9 @@ export const MAINstore = defineStore('mainStore',{
       showModal: false,
       breeds:[],
       images:[],
-      likes:[]
+      favorites:[],
+      likes:[],
+      dislikes:[],
     }
   },
 })
