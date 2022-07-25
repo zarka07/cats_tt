@@ -4,12 +4,12 @@
     <div class="current-content" v-else>
       <div class="current-tab">
         <button type="submit" class="back-button" value="" @click="goBack()"></button>
-        <div class="tab-name"><span>FAVORITES</span></div>
+        <div class="tab-name">LIKES</div>
       </div>
 
-      <div class="wall" v-if="this.mainStore.favorites.length != 0">
+      <div class="wall" v-if="this.mainStore.likes.length != 0">
         <masonry-wall
-          :items="this.mainStore.favorites"
+          :items="this.mainStore.likes"
           :ssr-columns="3"
           :column-width="180"
           :gap="8"
@@ -24,7 +24,7 @@
           </template>
         </masonry-wall>
       </div>
-      <div class="noFavorites" v-else>No item found</div>
+      <div class="unset" v-else>No item found</div>
     </div>
   </div>
 </template>
@@ -41,16 +41,16 @@ export default {
       mainStore,
     };
   },
-  name: "tab-favorites",
+  name: "tab-likes",
   methods: {
     goBack() {
       this.$router.go(-1);
     },
     unset(item) {
       const deletable = item;
-      for (let i = 0; i < this.mainStore.favorites.length; i++) {
-        if (this.mainStore.favorites[i] === deletable) {
-          this.mainStore.favorites.splice(i, 1);
+      for (let i = 0; i < this.mainStore.likes.length; i++) {
+        if (this.mainStore.likes[i] === deletable) {
+          this.mainStore.likes.splice(i, 1);
           break;
         }
       }
@@ -141,7 +141,7 @@ div.tab-name {
   background-image: url("../assets/delete-heart.svg");
 }
 
-.noFavorites {
+.unset {
   display: flex;
   justify-content: flex-start;
   align-items: center;
