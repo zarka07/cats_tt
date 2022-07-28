@@ -13,6 +13,7 @@ export const MAINstore = defineStore('mainStore',{
       favorites:[],
       likes:[],
       dislikes:[],
+      actions:[],
     }
   },
 })
