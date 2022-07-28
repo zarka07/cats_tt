@@ -73,7 +73,7 @@ export default {
       ],
       url: "",
       alt: "",
-      action: { time: "", addedTo: "", smile: "", id: "" },
+      action: { time: "", addedTo: "", smile: "", url:"", id: "" },
     };
   },
   name: "tab-voting",
@@ -97,11 +97,10 @@ export default {
           arr[j] = arr[i];
           arr[i] = temp;
         }
-        
           this.url = arr[0].image.url;
           this.action.id = arr[0].name;
+          this.action.url = arr[0].image.url;
           this.mainStore.loading = false;
-          console.log(arr[0])
           return arr[0];
         
         

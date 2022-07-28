@@ -16,7 +16,7 @@
         >
           <template #default="{ item }">
             <div class="container-image">
-              <img class="_image" v-if="item" :src="item.image.url" :alt="item.id" />
+              <img class="_image" v-if="item" :src="item.url" :alt="item.id" />
               <div class="middle">
                 <button type="button" class="_text" @click="unset(item)"></button>
               </div>
