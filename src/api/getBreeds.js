@@ -10,12 +10,13 @@ export default {
   methods: {
     async loadBreeds() {
       try {
-        this.mainStore.loading = true;
         axios.defaults.headers.common["x-api-key"] =
           "bbf7ce2f-68fc-4879-8dda-4139a8c2823b";
         let response = await axios.get("https://api.thecatapi.com/v1/breeds");
-        this.mainStore.breeds = response.data;
-        this.mainStore.loading = false;
+        this.mainStore.breeds = response.data.filter(item => {
+          return item.hasOwnProperty('image')
+        })
+        return this.mainStore.breeds;
       } catch (error) {
         console.log(error);
       }
