@@ -1,5 +1,5 @@
 <template>
-  <search-panel></search-panel>
+  <search-panel :show="showSearch" @search="this.search = $event"></search-panel>
   <div class="content-row">
     <Loader v-if="this.mainStore.loading" />
     <div class="current-content" v-else>
@@ -10,7 +10,7 @@
 
       <div class="wall" v-if="this.mainStore.dislikes.length != 0">
         <masonry-wall
-          :items="this.mainStore.dislikes"
+          :items="dislikesByTitle"
           :ssr-columns="3"
           :column-width="180"
           :gap="8"
@@ -43,6 +43,12 @@ export default {
     };
   },
   name: "tab-dislikes",
+  data(){
+    return{
+      showSearch: true,
+      search: "",
+    }
+  },
   methods: {
     goBack() {
       this.$router.go(-1);
@@ -57,6 +63,13 @@ export default {
       }
     },
   },
+  computed:{
+    dislikesByTitle() {
+      return this.mainStore.dislikes.filter(
+        (item) => item.id.toLowerCase().indexOf(this.search.toLowerCase()) !== -1
+      );
+    },
+  }
 };
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <search-panel></search-panel>
+  <search-panel :show="showSearch"></search-panel>
   <div class="content-row">
     <Loader v-if="this.mainStore.loading" />
     <div class="current-content" v-else>
@@ -90,10 +90,12 @@
       </div>
 
       <div class="wall">
-        <masonry-wall :items="paginatedImages" 
-          :ssr-columns="3" 
-          :column-width="180" 
-          :gap="8">
+        <masonry-wall
+          :items="paginatedImages"
+          :ssr-columns="3"
+          :column-width="180"
+          :gap="8"
+        >
           <template #default="{ item }">
             <div class="container-image">
               <img class="_image" :src="item.url" :alt="item.id" />
@@ -105,40 +107,40 @@
         </masonry-wall>
 
         <nav class="breeds-nav" aria-label="Page navigation example">
-            <ul class="pagination">
-              <li class="page-item">
-                <button
-                  :disabled="prevPageDisabled"
-                  type="button"
-                  class="page prev-page"
-                  @click="this.mainStore.galleryCurrentPage--"
-                  :style="
-                    this.galleryCurrentPage != 1
-                      ? { backgroundColor: '#FBE0DC' }
-                      : { backgroundColor: '#F8F8F7', color: '#8C8C8C' }
-                  "
-                >
-                  Prev
-                </button>
-              </li>
+          <ul class="pagination">
+            <li class="page-item">
+              <button
+                :disabled="prevPageDisabled"
+                type="button"
+                class="page prev-page"
+                @click="this.mainStore.galleryCurrentPage--"
+                :style="
+                  this.galleryCurrentPage != 1
+                    ? { backgroundColor: '#FBE0DC' }
+                    : { backgroundColor: '#F8F8F7', color: '#8C8C8C' }
+                "
+              >
+                Prev
+              </button>
+            </li>
 
-              <li class="page-item">
-                <button
-                  :disabled="nextPageDisabled"
-                  type="button"
-                  @click="this.mainStore.galleryCurrentPage++"
-                  class="page next-page"
-                  :style="
-                    this.mainStore.galleryCurrentPage < pages.length
-                      ? { backgroundColor: '#FBE0DC' }
-                      : { backgroundColor: '#F8F8F7', color: '#8C8C8C' }
-                  "
-                >
-                  Next
-                </button>
-              </li>
-            </ul>
-          </nav>
+            <li class="page-item">
+              <button
+                :disabled="nextPageDisabled"
+                type="button"
+                @click="this.mainStore.galleryCurrentPage++"
+                class="page next-page"
+                :style="
+                  this.mainStore.galleryCurrentPage < pages.length
+                    ? { backgroundColor: '#FBE0DC' }
+                    : { backgroundColor: '#F8F8F7', color: '#8C8C8C' }
+                "
+              >
+                Next
+              </button>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
   </div>
@@ -149,7 +151,7 @@ import { MAINstore } from "../store/mainStore";
 import Loader from "../components/Loader.vue";
 import getImages from "../api/getImages";
 import getBreeds from "../api/getBreeds";
-import SearchPanel from '../components/SearchPanel.vue';
+import SearchPanel from "../components/SearchPanel.vue";
 export default {
   mixins: [getImages, getBreeds],
   emits: ["linkTo"],
@@ -163,6 +165,7 @@ export default {
   },
   data() {
     return {
+      showSearch: false,
       search: "",
       prevPageDisabled: true,
       nextPageDisabled: Boolean,
@@ -197,11 +200,7 @@ export default {
       this.$router.go(-1);
     },
     reload() {
-      this.loadImages(
-        this.currentBreed,
-        this.currentType,
-        this.currentSorting
-      );
+      this.loadImages(this.currentBreed, this.currentType, this.currentSorting);
     },
     setFavorite(item) {
       for (var i = 0; i < this.mainStore.favorites.length; i++) {
@@ -228,14 +227,14 @@ export default {
       return images.slice(from, to);
     },
   },
-  created(){
+  created() {
     this.loadBreeds();
     this.loadImages(
       this.currentBreed,
       this.currentType,
       this.currentSorting,
       this.currentLimit
-    )
+    );
   },
   mounted() {
     this.setPages();
@@ -283,7 +282,7 @@ export default {
 @import url("../css/tabs.css");
 
 div.tab-name {
-    margin-left: 10px;
+  margin-left: 10px;
 }
 
 button.upload-button {
@@ -414,5 +413,4 @@ button.reload-button:hover {
   background-image: url("../assets/reload-hover.svg");
   background-color: #ff868e;
 }
-
 </style>

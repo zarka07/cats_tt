@@ -47,10 +47,10 @@
     border-radius: 10px;
   }
   
-  .search-submit:hover {
+  /* .search-submit:hover {
     background-color: #ff868e;
     background-image: url("../assets/search-hover.svg");
-  }
+  } */
   
   button.links {
     background-color: #fff;

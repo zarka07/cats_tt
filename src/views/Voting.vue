@@ -1,5 +1,5 @@
 <template>
-  <search-panel></search-panel>
+  <search-panel :show="showSearch"></search-panel>
   <div class="content-row">
     <Loader v-if="this.mainStore.loading" />
     <div class="current-content" v-else>
@@ -68,6 +68,7 @@ export default {
   },
   data() {
     return {
+      showSearch: false,
       smiles: [
         require("../assets/user-action-smile.svg"),
         require("../assets/user-action-heart.svg"),

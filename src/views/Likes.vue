@@ -1,5 +1,5 @@
 <template>
-  <search-panel></search-panel>
+  <search-panel :show="showSearch" @search="this.search = $event"></search-panel>
   <div class="content-row">
     <Loader v-if="this.mainStore.loading" />
     <div class="current-content" v-else>
@@ -10,7 +10,7 @@
 
       <div class="wall" v-if="this.mainStore.likes.length != 0">
         <masonry-wall
-          :items="this.mainStore.likes"
+          :items="likesByTitle"
           :ssr-columns="3"
           :column-width="180"
           :gap="8"
@@ -43,6 +43,12 @@ export default {
     };
   },
   name: "tab-likes",
+  data(){
+    return{
+      showSearch: true,
+      search: "",
+    }
+  },
   methods: {
     goBack() {
       this.$router.go(-1);
@@ -55,6 +61,13 @@ export default {
           break;
         }
       }
+    },
+  },
+  computed:{
+    likesByTitle() {
+      return this.mainStore.likes.filter(
+        (item) => item.id.toLowerCase().indexOf(this.search.toLowerCase()) !== -1
+      );
     },
   },
 };

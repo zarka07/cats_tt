@@ -1,5 +1,5 @@
 <template>
-  <search-panel></search-panel>
+  <search-panel :show="showSearch" @search="this.search = $event"></search-panel>
   <div class="content-row">
     <Loader v-if="this.mainStore.loading" />
     <div class="current-content" v-else>
@@ -170,6 +170,7 @@ export default {
   },
   data() {
     return {
+      showSearch: true,
       search: "",
       currentSorting: "desc",
       visibleHover: null,
@@ -222,9 +223,6 @@ export default {
     },
   },
   watch: {
-    search() {
-      this.setPages();
-    },
     breedsCurrentPage() {
       this.prevPageDisabled = this.breedsCurrentPage == 1 ? true : false;
       this.nextPageDisabled = this.breedsCurrentPage < this.pages.length ? false : true;

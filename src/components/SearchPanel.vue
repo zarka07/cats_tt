@@ -1,7 +1,12 @@
 <template>
   <div class="form-row">
     <form class="search-form">
-      <input type="text" placeholder="Search for breeds by name" />
+      <input
+        type="text"
+        :disabled="!show"
+        placeholder="Search for breeds by name"
+        v-model="search"
+      />
       <div class="search-submit"></div>
     </form>
     <button class="links smile-button" type="button" @click="toLikes()"></button>
@@ -13,22 +18,32 @@
 <script>
 export default {
   name: "search-panel",
-  methods:{
-    toLikes(){
-      console.log('here')
-      this.$router.push('likes')
+  props: ["show"],
+  emits: ['search'],
+  data() {
+    return {
+      search: "",
+    };
+  },
+  methods: {
+    toLikes() {
+      this.$router.push("likes");
     },
-    toFav(){
-      this.$router.push('favorites')
+    toFav() {
+      this.$router.push("favorites");
     },
-    toDislikes(){
-      this.$router.push('dislikes')
-    }
-  }
+    toDislikes() {
+      this.$router.push("dislikes");
+    },
+  },
+  watch: {
+    search() {
+      this.$emit('search',this.search)
+    },
+  },
 };
 </script>
 
 <style scoped>
 @import url("../css/search-panel-with-icons.css");
-
 </style>
