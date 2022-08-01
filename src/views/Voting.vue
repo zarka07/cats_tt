@@ -1,4 +1,5 @@
 <template>
+  <search-panel></search-panel>
   <div class="content-row">
     <Loader v-if="this.mainStore.loading" />
     <div class="current-content" v-else>
@@ -55,9 +56,10 @@
 import { MAINstore } from "../store/mainStore";
 import Loader from "../components/Loader.vue";
 import getBreeds from "../api/getBreeds";
+import SearchPanel from '../components/SearchPanel.vue';
 export default {
   mixins: [getBreeds],
-  components: { Loader },
+  components: { Loader, SearchPanel },
   setup() {
     const mainStore = MAINstore();
     return {

@@ -1,4 +1,5 @@
 <template>
+  <search-panel></search-panel>
   <div class="content-row">
     <Loader v-if="this.mainStore.loading" />
     <div class="current-content" v-else>

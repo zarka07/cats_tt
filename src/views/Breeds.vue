@@ -1,4 +1,5 @@
 <template>
+  <search-panel></search-panel>
   <div class="content-row">
     <Loader v-if="this.mainStore.loading" />
     <div class="current-content" v-else>
@@ -154,13 +155,13 @@
 <script>
 import Loader from "../components/Loader.vue";
 import { MAINstore } from "../store/mainStore";
-import axios from "axios";
 import getBreeds from "../api/getBreeds";
 import getBreed from "../api/getBreed";
+import SearchPanel from "../components/SearchPanel.vue";
 export default {
   mixins: [getBreeds, getBreed],
   name: "tab-breeds",
-  components: { Loader },
+  components: { Loader, SearchPanel },
   setup() {
     const mainStore = MAINstore();
     return {
@@ -472,6 +473,6 @@ span {
 }
 
 .container-image:hover ._middle {
-    opacity: 1;
+  opacity: 1;
 }
 </style>

@@ -1,4 +1,5 @@
 <template>
+  <search-panel></search-panel>
   <div class="content-row">
     <Loader v-if="this.mainStore.loading" />
     <div class="current-content" v-else>
@@ -148,11 +149,12 @@ import { MAINstore } from "../store/mainStore";
 import Loader from "../components/Loader.vue";
 import getImages from "../api/getImages";
 import getBreeds from "../api/getBreeds";
+import SearchPanel from '../components/SearchPanel.vue';
 export default {
   mixins: [getImages, getBreeds],
   emits: ["linkTo"],
   name: "tab-gallery",
-  components: { Loader },
+  components: { Loader, SearchPanel },
   setup() {
     const mainStore = MAINstore();
     return {
