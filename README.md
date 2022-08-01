@@ -1,4 +1,4 @@
-# cats
+# Catspow
 
 ## Project setup
 ```
