@@ -101,7 +101,7 @@ nav a.router-link-exact-active {
   height: 100vh;
   width: 100vw;
   margin: 0;
-  max-width: 1400px !important;
+  max-width: 1400px!important;
   overflow: none;
 }
 ._row {

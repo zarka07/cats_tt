@@ -102,8 +102,6 @@ export default {
           this.action.url = arr[0].image.url;
           this.mainStore.loading = false;
           return arr[0];
-        
-        
       } else {
         return;
       }
@@ -115,12 +113,9 @@ export default {
         }
       }
       this.action.addedTo = "Likes";
-      this.action.time = this.getTime();
       this.action.smile = this.smiles[0];
-      this.mainStore.actions.push(this.action);
       this.mainStore.likes.push(item);
-      this.action = {};
-      this.getRandomCat();
+      this.clearInfo();
     },
     addToFavorites(item) {
       for (var i = 0; i < this.mainStore.favorites.length; i++) {
@@ -129,12 +124,9 @@ export default {
         }
       }
       this.action.addedTo = "Favorites";
-      this.action.time = this.getTime();
-      this.action.smile = this.smiles[1];
-      this.mainStore.actions.push(this.action);
       this.mainStore.favorites.push(item);
-      this.action = {};
-      this.getRandomCat();
+      this.action.smile = this.smiles[1];
+      this.clearInfo();
     },
     addToDislikes(item) {
       for (var i = 0; i < this.mainStore.dislikes.length; i++) {
@@ -143,13 +135,16 @@ export default {
         }
       }
       this.action.addedTo = "Dislikes";
-      this.action.time = this.getTime();
       this.action.smile = this.smiles[2];
-      this.mainStore.actions.push(this.action);
+      this.clearInfo();
       this.mainStore.dislikes.push(item);
+    },
+    clearInfo(){
+      this.mainStore.actions.push(this.action);
+      this.action.time = this.getTime();
       this.action = {};
       this.getRandomCat();
-    },
+    }
   },
   async mounted() {
     this.mainStore.loading = true;
@@ -169,59 +164,14 @@ export default {
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@200&display=swap");
 @import url("../css/back-button.css");
+@import url("../css/tabs.css");
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.form-control {
-  color: #1d1d1d;
-}
-
-.content-row {
-  margin-top: 10px;
-  width: 100%;
-  min-height: 85vh;
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 0;
-  display: flex;
-  justify-content: space-evenly;
+div.tab-name {
+    margin-left: 10px;
 }
 
 .current-content {
-  width: 100%;
-  padding: 10px;
   margin-bottom: 10px;
-  /* display: flex;
-  align-items: flex-start;
-  justify-content: flex-start; */
-}
-
-.current-tab {
-  display: flex;
-}
-
-div.tab-name {
-  margin-left: 10px;
-  text-align: center;
-  background-color: #ff868e;
-  border-radius: 10px;
-  height: 30px;
-  width: 140px;
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: "Jost", sans-serif;
-  font-weight: 500;
-  font-size: 15px;
 }
 
 .randomEl {
