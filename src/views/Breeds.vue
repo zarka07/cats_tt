@@ -1,155 +1,154 @@
 <template>
-    <div class="content-row">
-      <Loader v-if="this.mainStore.loading" />
-      <div class="current-content" v-else>
-        <div class="current-tab" v-show="showMasonry">
-          <button type="submit" class="back-button" value="" @click="goBack()"></button>
-          <div class="tab-name">BREEDS</div>
-
-          <form>
-            <select
-              class="selectBreed"
-              aria-label="All breeds"
-              v-model="currentBreed"
-              title="All breeds"
-              name="Breeds"
-              id="breeds"
-            >
-              <option value="" disabled selected>All Breeds:</option>
-              <option v-for="item in breeds" :key="item" :value="item">
-                {{ item.name }}
-              </option>
-            </select>
-          </form>
-
-          <form style="width: 8vw; margin-left: 5px">
-            <select
-              class="selectBreed"
-              aria-label="Select limit"
-              v-model="perPage"
-              title="Limit"
-              name="Limit"
-              id="limit"
-            >
-              <option value="" disabled selected>Limit:</option>
-              <option v-for="item in limits" :key="item" :value="item.value">
-                {{ item.text }}{{ item.value }}
-              </option>
-            </select>
-          </form>
-
-          <button
-            type="button"
-            class="sort sort-up"
-            @click="currentSorting = 'asc'"
-          ></button>
-          <button
-            type="button"
-            class="sort sort-down"
-            @click="currentSorting = 'desc'"
-          ></button>
-        </div>
-
-        <div class="wall" v-if="showMasonry">
-          <masonry-wall
-            :items="paginatedBreeds"
-            :ssr-columns="3"
-            :column-width="180"
-            :gap="8"
+  <div class="content-row">
+    <Loader v-if="this.mainStore.loading" />
+    <div class="current-content" v-else>
+      <div class="current-tab" v-show="showMasonry">
+        <button type="submit" class="back-button" value="" @click="goBack()"></button>
+        <div class="tab-name">BREEDS</div>
+        <form>
+          <select
+            class="selectBreed"
+            aria-label="All breeds"
+            v-model="currentBreed"
+            title="All breeds"
+            name="Breeds"
+            id="breeds"
           >
-            <template #default="{ item }">
-              <div class="container-image">
-                <img class="_image" :src="item.image.url" :alt="item.id" />
-                <div class="middle">
-                  <div class="_text">{{ item.name }}</div>
-                </div>
+            <option value="" disabled selected>All Breeds:</option>
+            <option v-for="item in breeds" :key="item" :value="item">
+              {{ item.name }}
+            </option>
+          </select>
+        </form>
+
+        <form style="width: 8vw; margin-left: 5px">
+          <select
+            class="selectBreed"
+            aria-label="Select limit"
+            v-model="perPage"
+            title="Limit"
+            name="Limit"
+            id="limit"
+          >
+            <option value="" disabled selected>Limit:</option>
+            <option v-for="item in limits" :key="item" :value="item.value">
+              {{ item.text }}{{ item.value }}
+            </option>
+          </select>
+        </form>
+
+        <button
+          type="button"
+          class="sort sort-up"
+          @click="currentSorting = 'asc'"
+        ></button>
+        <button
+          type="button"
+          class="sort sort-down"
+          @click="currentSorting = 'desc'"
+        ></button>
+      </div>
+
+      <div class="wall" v-if="showMasonry">
+        <masonry-wall
+          :items="paginatedBreeds"
+          :ssr-columns="3"
+          :column-width="180"
+          :gap="8"
+        >
+          <template #default="{ item }">
+            <div class="container-image">
+              <img class="_image" :src="item.image.url" :alt="item.id" />
+              <div class="_middle">
+                <div class="__text">{{ item.name }}</div>
               </div>
-            </template>
-          </masonry-wall>
-
-          <nav class="breeds-nav" aria-label="Page navigation example">
-            <ul class="pagination">
-              <li class="page-item">
-                <button
-                  :disabled="prevPageDisabled"
-                  type="button"
-                  class="page prev-page"
-                  @click="this.mainStore.currentPage--"
-                  :style="
-                    this.currentPage != 1
-                      ? { backgroundColor: '#FBE0DC' }
-                      : { backgroundColor: '#F8F8F7', color: '#8C8C8C' }
-                  "
-                >
-                  Prev
-                </button>
-              </li>
-
-              <li class="page-item">
-                <button
-                  :disabled="nextPageDisabled"
-                  type="button"
-                  @click="this.mainStore.currentPage++"
-                  class="page next-page"
-                  :style="
-                    this.mainStore.currentPage < pages.length
-                      ? { backgroundColor: '#FBE0DC' }
-                      : { backgroundColor: '#F8F8F7', color: '#8C8C8C' }
-                  "
-                >
-                  Next
-                </button>
-              </li>
-            </ul>
-          </nav>
-        </div>
-
-        <div class="selected-breed" v-else>
-          <div class="current-breed-tab">
-            <button
-              type="submit"
-              class="back-button"
-              value=""
-              @click="goBackToManosry()"
-            ></button>
-            <div class="breed-name">BREEDS</div>
-            <div class="breed-id">
-              {{ selectedBreed.breeds[0].name }}
             </div>
+          </template>
+        </masonry-wall>
+
+        <nav class="breeds-nav" aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item">
+              <button
+                :disabled="prevPageDisabled"
+                type="button"
+                class="page prev-page"
+                @click="this.mainStore.breedsCurrentPage--"
+                :style="
+                  this.breedsCurrentPage != 1
+                    ? { backgroundColor: '#FBE0DC' }
+                    : { backgroundColor: '#F8F8F7', color: '#8C8C8C' }
+                "
+              >
+                Prev
+              </button>
+            </li>
+
+            <li class="page-item">
+              <button
+                :disabled="nextPageDisabled"
+                type="button"
+                @click="this.mainStore.breedsCurrentPage++"
+                class="page next-page"
+                :style="
+                  this.mainStore.breedsCurrentPage < pages.length
+                    ? { backgroundColor: '#FBE0DC' }
+                    : { backgroundColor: '#F8F8F7', color: '#8C8C8C' }
+                "
+              >
+                Next
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="selected-breed" v-else>
+        <div class="current-breed-tab">
+          <button
+            type="submit"
+            class="back-button"
+            value=""
+            @click="goBackToManosry()"
+          ></button>
+          <div class="breed-name">BREEDS</div>
+          <div class="breed-id">
+            {{ selectedBreed.breeds[0].name }}
           </div>
-          <img
-            class="selected-breed-image"
-            :src="selectedBreed.url"
-            :alt="selectedBreed.id"
-          />
-          <div class="current-breed-description">
-            <h4 class="description-breed-name">{{ selectedBreed.breeds[0].name }}</h4>
-            <!-- <h6 class="description-breed-country">{{selectedBreed.breeds[0].origin}}</h6> -->
-            <div class="description-row">
-              <div class="col-5">
-                <div><b>Temperament:</b></div>
-                <div>
-                  <span>{{ selectedBreed.breeds[0].temperament }}</span>
-                </div>
+        </div>
+        <img
+          class="selected-breed-image"
+          :src="selectedBreed.url"
+          :alt="selectedBreed.id"
+        />
+        <div class="current-breed-description">
+          <h4 class="description-breed-name">{{ selectedBreed.breeds[0].name }}</h4>
+          <!-- <h6 class="description-breed-country">{{selectedBreed.breeds[0].origin}}</h6> -->
+          <div class="description-row">
+            <div class="col-5">
+              <div><b>Temperament:</b></div>
+              <div>
+                <span>{{ selectedBreed.breeds[0].temperament }}</span>
               </div>
-              <div class="col-5">
-                <div>
-                  <b>Origin: </b><span>{{ selectedBreed.breeds[0].origin }}</span>
-                </div>
-                <div>
-                  <b>Weight: </b
-                  ><span>{{ selectedBreed.breeds[0].weight.metric }} kgs</span>
-                </div>
-                <div>
-                  <b>Life span: </b
-                  ><span>{{ selectedBreed.breeds[0].life_span }} years</span>
-                </div>
+            </div>
+            <div class="col-5">
+              <div>
+                <b>Origin: </b><span>{{ selectedBreed.breeds[0].origin }}</span>
+              </div>
+              <div>
+                <b>Weight: </b
+                ><span>{{ selectedBreed.breeds[0].weight.metric }} kgs</span>
+              </div>
+              <div>
+                <b>Life span: </b
+                ><span>{{ selectedBreed.breeds[0].life_span }} years</span>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -157,8 +156,9 @@ import Loader from "../components/Loader.vue";
 import { MAINstore } from "../store/mainStore";
 import axios from "axios";
 import getBreeds from "../api/getBreeds";
+import getBreed from "../api/getBreed";
 export default {
-  mixins: [getBreeds],
+  mixins: [getBreeds, getBreed],
   name: "tab-breeds",
   components: { Loader },
   setup() {
@@ -175,7 +175,7 @@ export default {
       prevPageDisabled: true,
       nextPageDisabled: Boolean,
       showMasonry: true,
-      currentBreed: "",
+      currentBreed: {},
       selectedBreed: {},
       breedsCount: 1,
       limits: [
@@ -204,22 +204,6 @@ export default {
       this.currentBreed = "";
     },
 
-    async loadBreed() {
-      let id = this.currentBreed.id;
-      this.mainStore.loading = true;
-      try {
-        axios.defaults.headers.common["x-api-key"] =
-          "bbf7ce2f-68fc-4879-8dda-4139a8c2823b"; 
-        let response = await axios.get(
-          `https://api.thecatapi.com/v1/images/search?breed_ids=${id}`
-        );
-        this.selectedBreed = response.data[0];
-        this.mainStore.loading = false;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-
     setPages() {
       this.pages = [];
       this.breedsCount = Object.keys(this.breedsByTitle).length;
@@ -229,7 +213,7 @@ export default {
       }
     },
     paginate(breeds) {
-      let page = this.currentPage;
+      let page = this.breedsCurrentPage;
       let perPage = this.perPage;
       let from = page * perPage - perPage;
       let to = page * perPage;
@@ -240,19 +224,18 @@ export default {
     search() {
       this.setPages();
     },
-    currentPage() {
-      this.prevPageDisabled = this.currentPage == 1 ? true : false;
-      this.nextPageDisabled = this.currentPage < this.pages.length ? false : true;
+    breedsCurrentPage() {
+      this.prevPageDisabled = this.breedsCurrentPage == 1 ? true : false;
+      this.nextPageDisabled = this.breedsCurrentPage < this.pages.length ? false : true;
     },
     currentLimit() {
       this.loadBreeds();
     },
     currentBreed() {
       if (this.currentBreed === "") {
-        //this.loadBreeds();
         this.showMasonry = true;
       } else {
-        this.loadBreed();
+        this.loadBreed(this.currentBreed.id);
         this.showMasonry = false;
       }
     },
@@ -265,7 +248,7 @@ export default {
       return this.mainStore.breeds;
     },
     nextPageDisabled() {
-      return this.currentPage < this.pages.length ? false : true;
+      return this.breedsCurrentPage < this.pages.length ? false : true;
     },
     breedsByTitle() {
       return this.sortedBreeds.filter(
@@ -275,8 +258,8 @@ export default {
     showBreeds() {
       return this.mainStore.showBreeds;
     },
-    currentPage() {
-      return this.mainStore.currentPage;
+    breedsCurrentPage() {
+      return this.mainStore.breedsCurrentPage;
     },
     paginatedBreeds() {
       return this.paginate(this.breedsByTitle);
@@ -308,45 +291,14 @@ export default {
 @import url("../css/back-button.css");
 @import url("../css/manosry-wall.css");
 @import url("../css/pagination.css");
-/* .container-breeds {
-  min-height: 85vh;
-  width: 100%;
-} */
+@import url("../css/tabs.css");
 
-.current-content {
-  width: 100%;
-  padding: 10px;
-}
-
-.content-row {
-  margin-top: 10px;
-  width: 100%;
-  min-height: 85vh;
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 0;
-  display: flex;
-  justify-content: space-evenly;
+div.tab-name {
+  margin-left: 0 !important;
 }
 
 .current-tab {
-  display: flex;
   justify-content: space-between;
-}
-
-div.tab-name {
-  text-align: center;
-  background-color: #ff868e;
-  border-radius: 10px;
-  height: 30px;
-  width: 140px;
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: "Jost", sans-serif;
-  font-weight: 500;
-  font-size: 15px;
 }
 
 select {
@@ -483,5 +435,43 @@ h6.description-breed-country {
 
 span {
   color: #8c8c8c;
+}
+
+._middle {
+  background-color: rgba(255, 134, 142, 0.6);
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  border-color: transparent;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  transition: 0.5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+}
+
+.__text {
+  background-color: #fff;
+  border-radius: 10px;
+  min-height: 30px;
+  height: auto;
+  width: 140px;
+  color: #ff868e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Jost", sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  margin-bottom: 15px;
+}
+
+.container-image:hover ._middle {
+    opacity: 1;
 }
 </style>
