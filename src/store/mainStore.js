@@ -3,7 +3,8 @@ import { defineStore } from 'pinia'
 export const MAINstore = defineStore('mainStore',{
   state: ()=> {
     return{
-      currentPage: 1,
+      breedsCurrentPage: 1,
+      galleryCurrentPage: 1,
       loading: false,
       showBreeds: true,
       showImages:true,

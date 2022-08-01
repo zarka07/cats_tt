@@ -89,7 +89,10 @@
       </div>
 
       <div class="wall">
-        <masonry-wall :items="images" :ssr-columns="3" :column-width="180" :gap="8">
+        <masonry-wall :items="paginatedImages" 
+          :ssr-columns="3" 
+          :column-width="180" 
+          :gap="8">
           <template #default="{ item }">
             <div class="container-image">
               <img class="_image" :src="item.url" :alt="item.id" />
@@ -99,6 +102,42 @@
             </div>
           </template>
         </masonry-wall>
+
+        <nav class="breeds-nav" aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item">
+                <button
+                  :disabled="prevPageDisabled"
+                  type="button"
+                  class="page prev-page"
+                  @click="this.mainStore.galleryCurrentPage--"
+                  :style="
+                    this.galleryCurrentPage != 1
+                      ? { backgroundColor: '#FBE0DC' }
+                      : { backgroundColor: '#F8F8F7', color: '#8C8C8C' }
+                  "
+                >
+                  Prev
+                </button>
+              </li>
+
+              <li class="page-item">
+                <button
+                  :disabled="nextPageDisabled"
+                  type="button"
+                  @click="this.mainStore.galleryCurrentPage++"
+                  class="page next-page"
+                  :style="
+                    this.mainStore.galleryCurrentPage < pages.length
+                      ? { backgroundColor: '#FBE0DC' }
+                      : { backgroundColor: '#F8F8F7', color: '#8C8C8C' }
+                  "
+                >
+                  Next
+                </button>
+              </li>
+            </ul>
+          </nav>
       </div>
     </div>
   </div>
@@ -109,12 +148,11 @@ import { MAINstore } from "../store/mainStore";
 import Loader from "../components/Loader.vue";
 import getImages from "../api/getImages";
 import getBreeds from "../api/getBreeds";
-import SearchPanel from "../components/SearchPanel.vue";
 export default {
   mixins: [getImages, getBreeds],
   emits: ["linkTo"],
   name: "tab-gallery",
-  components: { Loader, SearchPanel },
+  components: { Loader },
   setup() {
     const mainStore = MAINstore();
     return {
@@ -140,7 +178,7 @@ export default {
       ],
       currentBreed: "",
       imagesCount: 1,
-      currentLimit: "5",
+      currentLimit: 5,
       limits: [
         { type: "Limit: ", value: "5" },
         { type: "Limit: ", value: "10" },
@@ -149,7 +187,6 @@ export default {
         { type: "Limit: ", value: "50" },
         { type: "Limit: ", value: "100" },
       ],
-      perPage: 5,
       pages: [],
     };
   },
@@ -161,8 +198,7 @@ export default {
       this.loadImages(
         this.currentBreed,
         this.currentType,
-        this.currentSorting,
-        this.currentLimit
+        this.currentSorting
       );
     },
     setFavorite(item) {
@@ -174,31 +210,33 @@ export default {
       return this.mainStore.favorites.push(item);
     },
 
-    // setPages() {
-    //   this.pages = [];
-    //   this.imagesCount = Object.keys(this.imagesByTitle).length;
-    //   let numberOfPages = Math.ceil(this.imagesCount / this.perPage);
-    //   console.log("images count: ", this.imagesCount);
-    //   for (let index = 1; index <= numberOfPages; index++) {
-    //     this.pages.push(index);
-    //   }
-    // },
-    // paginate(images) {
-    //   let page = this.currentPage;
-    //   let perPage = this.perPage;
-    //   let from = page * perPage - perPage;
-    //   let to = page * perPage;
-    //   return images.slice(from, to);
-    // },
+    setPages() {
+      this.pages = [];
+      this.imagesCount = Object.keys(this.images).length;
+      let numberOfPages = Math.ceil(this.imagesCount / this.currentLimit);
+      for (let index = 1; index <= numberOfPages; index++) {
+        this.pages.push(index);
+      }
+    },
+    paginate(images) {
+      let page = this.galleryCurrentPage;
+      let perPage = this.currentLimit;
+      let from = page * perPage - perPage;
+      let to = page * perPage;
+      return images.slice(from, to);
+    },
   },
-  mounted() {
+  created(){
     this.loadBreeds();
     this.loadImages(
       this.currentBreed,
       this.currentType,
       this.currentSorting,
       this.currentLimit
-    );
+    )
+  },
+  mounted() {
+    this.setPages();
   },
   computed: {
     breeds() {
@@ -207,43 +245,15 @@ export default {
     images() {
       return this.mainStore.images;
     },
-    showModal() {
-      return this.mainStore.showModal;
-    },
     nextPageDisabled() {
-      return this.currentPage < this.pages.length ? false : true;
+      return this.galleryCurrentPage < this.pages.length ? false : true;
     },
-    imagesByTitle() {
-      return this.images;
-      // return this.images.filter(
-      //   (item) => item.name.toLowerCase().indexOf(this.search.toLowerCase()) !== -1
-      // );
-    },
-    showImages() {
-      return this.mainStore.showImages;
-    },
-    currentPage() {
-      return this.mainStore.currentPage;
+    galleryCurrentPage() {
+      return this.mainStore.galleryCurrentPage;
     },
     paginatedImages() {
-      return this.paginate(this.imagesByTitle);
+      return this.paginate(this.images);
     },
-    // sortedImages() {
-    //   switch (this.currentSorting.toLowerCase()) {
-    //     case "random":
-    //       return this.shuffleImages(this.images);
-    //     case "desc":
-    //       return this.images.sort((a, b) => {
-    //         if (a.name < b.name) return -1;
-    //         if (a.name > b.name) return 1;
-    //       });
-    //     case "asc":
-    //       return this.images.sort((a, b) => {
-    //         if (a.name < b.name) return 1;
-    //         if (a.name > b.name) return -1;
-    //       });
-    //   }
-    // },
     prevShevronDisabled() {
       return "../assets/prev-shevron-disabled.svg";
     },
@@ -252,13 +262,13 @@ export default {
     // search() {
     //   this.setPages();
     // },
-    // currentPage() {
-    //   this.prevPageDisabled = this.currentPage == 1 ? true : false;
-    //   this.nextPageDisabled = this.currentPage < this.pages.length ? false : true;
-    // },
-    // images() {
-    //   this.setPages();
-    // },
+    galleryCurrentPage() {
+      this.prevPageDisabled = this.galleryCurrentPage == 1 ? true : false;
+      this.nextPageDisabled = this.galleryCurrentPage < this.pages.length ? false : true;
+    },
+    images() {
+      this.setPages();
+    },
   },
 };
 </script>
@@ -268,42 +278,10 @@ export default {
 @import url("../css/back-button.css");
 @import url("../css/manosry-wall.css");
 @import url("../css/pagination.css");
-.content-row {
-  margin-top: 10px;
-  width: 100%;
-  min-height: 85vh;
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 0;
-  display: flex;
-  justify-content: space-evenly;
-}
-
-.current-content {
-  width: 100%;
-  padding: 10px;
-}
-
-
-
-.current-tab {
-  display: flex;
-}
+@import url("../css/tabs.css");
 
 div.tab-name {
-  margin-left: 10px;
-  text-align: center;
-  background-color: #ff868e;
-  border-radius: 10px;
-  height: 30px;
-  width: 140px;
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: "Jost", sans-serif;
-  font-weight: 500;
-  font-size: 15px;
+    margin-left: 10px;
 }
 
 button.upload-button {
@@ -435,23 +413,4 @@ button.reload-button:hover {
   background-color: #ff868e;
 }
 
-.middle {
-  align-items: center !important;
-}
-
-._text {
-  background-color: #fff;
-  background-image: url("../assets/like-heart.svg");
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 40px;
-  width: 40px;
-  color: #ff868e;
-  margin-bottom: 0 !important;
-  border-color: transparent;
-}
-
-._text:hover {
-  background-image: url("../assets/delete-heart.svg");
-}
 </style>
