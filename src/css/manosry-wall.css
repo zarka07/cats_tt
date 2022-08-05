@@ -45,7 +45,6 @@ img._image {
 }
 
 ._text {
-    background-color: #fff;
     background-image: url("../assets/like-heart.svg");
     background-position: center;
     background-repeat: no-repeat;

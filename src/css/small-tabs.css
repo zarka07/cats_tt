@@ -1,14 +1,13 @@
-.content-row {
+._content-row {
     margin-top: 10px;
     width: 100%;
     min-height: 85vh;
-    background-color: #fff;
     border-radius: 10px;
     padding: 0;
     display: flex;
 }
 
-.current-content {
+._current-content {
     padding: 10px;
     display: flex;
     align-items: flex-start;
@@ -18,15 +17,14 @@
 }
 
 
-.current-tab {
+._current-tab {
     display: flex;
 }
 
 
-button.back-button {
+button._back-button {
     background-image: url("../assets/arrow-left.svg");
     color: #ff868e;
-    background-color: #fbe0dc;
     border-radius: 10px;
     border-color: transparent;
     position: relative;
@@ -38,12 +36,12 @@ button.back-button {
     margin-right: 10px;
 }
 
-button.back-button:hover {
+button._back-button:hover {
     background-color: #ff868e;
     background-image: url("../assets/arrow-left-hover.svg");
 }
 
-div.tab-name {
+div._tab-name {
     text-align: center;
     background-color: #ff868e;
     border-radius: 10px;

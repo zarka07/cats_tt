@@ -3,10 +3,12 @@
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
+    gap:5px;
   }
   
   form.search-form {
-    width: 33vw;
+    min-width: 33.5vw;
+    width:auto;
     padding: 0;
     height: 40px;
     position: relative;
@@ -41,7 +43,6 @@
     height: 30px;
     background-image: url("../assets/search.svg");
     background-repeat: no-repeat;
-    background-color: #fbe0dc;
     background-position: center;
     border-color: transparent;
     border-radius: 10px;
@@ -51,9 +52,11 @@
     background-color: #ff868e;
     background-image: url("../assets/search-hover.svg");
   } */
-  
+  .btn-group{
+    gap:10px;
+  }
+
   button.links {
-    background-color: #fff;
     border-radius: 10px;
     border-color: transparent;
     position: relative;

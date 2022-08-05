@@ -1,7 +1,6 @@
 button.back-button {
     background-image: url("../assets/arrow-left.svg");
     color: #ff868e;
-    background-color: #fbe0dc;
     border-radius: 10px;
     border-color: transparent;
     position: relative;

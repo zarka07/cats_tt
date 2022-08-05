@@ -11,7 +11,7 @@
         <div>
           <div class="r-img">
             <transition name="fade">
-            <img class="randomImg" :src="url" :alt="action.id" />
+              <img class="randomImg" :src="url" :alt="action.id" />
             </transition>
           </div>
 
@@ -56,7 +56,7 @@
 import { MAINstore } from "../store/mainStore";
 import Loader from "../components/Loader.vue";
 import getBreeds from "../api/getBreeds";
-import SearchPanel from '../components/SearchPanel.vue';
+import SearchPanel from "../components/SearchPanel.vue";
 export default {
   mixins: [getBreeds],
   components: { Loader, SearchPanel },
@@ -76,78 +76,86 @@ export default {
       ],
       url: "",
       alt: "",
-      action: { time: "", addedTo: "", smile: "", url:"", id: "" },
+      action: { time: "", addedTo: "", smile: "", url: "", id: "" },
     };
   },
   name: "tab-voting",
   methods: {
     getTime() {
       let data = new Date();
-      let currentTime = `${data.getUTCHours()}:${data.getUTCMinutes()}`;
+      let currentTime = `${data.getHours()}:${data.getMinutes()}`;
       return currentTime;
     },
     goBack() {
       this.$router.go(-1);
     },
     getRandomCat() {
-      this.mainStore.loading = true;
+      // this.mainStore.loading = true;
       if (this.mainStore.breeds.length != 0) {
         let j, temp;
         let arr = this.mainStore.breeds;
-        for (let i = arr.length -1; i > 0; i--) {
+        for (let i = arr.length - 1; i > 0; i--) {
           j = Math.floor(Math.random() * (i + 1));
           temp = arr[j];
           arr[j] = arr[i];
           arr[i] = temp;
         }
-          this.url = arr[0].image.url;
-          this.action.id = arr[0].name;
-          this.action.url = arr[0].image.url;
-          this.mainStore.loading = false;
-          return arr[0];
+        this.url = arr[0].image.url;
+        this.action.id = arr[0].name;
+        this.action.url = arr[0].image.url;
+        // this.mainStore.loading = false;
+        return arr[0];
       } else {
         return;
       }
     },
     addToLikes(item) {
+      this.mainStore.loading = true;
       for (var i = 0; i < this.mainStore.likes.length; i++) {
         if (this.mainStore.likes[i] === item) {
           return false;
         }
       }
+      this.action.time = this.getTime();
       this.action.addedTo = "Likes";
-      this.action.smile = this.smiles[0];
       this.mainStore.likes.push(item);
+      this.action.smile = this.smiles[0];
       this.clearInfo();
+      this.mainStore.loading = false;
     },
     addToFavorites(item) {
+      this.mainStore.loading = true;
       for (var i = 0; i < this.mainStore.favorites.length; i++) {
         if (this.mainStore.favorites[i] === item) {
           return false;
         }
       }
+      this.action.time = this.getTime();
       this.action.addedTo = "Favorites";
       this.mainStore.favorites.push(item);
       this.action.smile = this.smiles[1];
       this.clearInfo();
+      this.mainStore.loading = false;
     },
     addToDislikes(item) {
+      this.action.time = this.getTime();
+      this.mainStore.loading = true;
       for (var i = 0; i < this.mainStore.dislikes.length; i++) {
         if (this.mainStore.dislikes[i] === item) {
           return false;
         }
       }
       this.action.addedTo = "Dislikes";
+      this.mainStore.dislikes.push(item);
       this.action.smile = this.smiles[2];
       this.clearInfo();
-      this.mainStore.dislikes.push(item);
+      this.mainStore.loading = false;
     },
-    clearInfo(){
+    clearInfo() {
       this.mainStore.actions.push(this.action);
-      this.action.time = this.getTime();
       this.action = {};
       this.getRandomCat();
-    }
+    },
   },
   async mounted() {
     this.mainStore.loading = true;
@@ -168,9 +176,10 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@200&display=swap");
 @import url("../css/back-button.css");
 @import url("../css/tabs.css");
+@import url("../css/theme-light.css");
 
 div.tab-name {
-    margin-left: 10px;
+  margin-left: 10px;
 }
 
 .current-content {
@@ -279,7 +288,6 @@ div.tab-name {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #f8f8f7;
   color: #8c8c8c;
   width: 100%;
   height: 60px;
@@ -294,7 +302,6 @@ div.tab-name {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #fff;
   padding: 5px 8px;
   border-radius: 5px;
 }

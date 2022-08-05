@@ -10,7 +10,7 @@
       <div class="modal-content">
         <div class="row">
           <div class="left"></div>
-          <div class="right">
+          <div class="_right">
             <div class="block">
               <button
                 type="button"
@@ -29,10 +29,10 @@
               >
               or face deletion.
             </h6>
-            <!-- choose'n'upload -->
+            <!-- choose'n'upload :style="upload_container_bgc"-->
             <Loader v-if="this.mainStore.loading"/>
             <div v-else id="upload-container" class="upload-container"
-            :style="upload_container_bgc">
+            >
                 <img class="downloaded-image" @click="pickFile" :src="image_url" v-if="image_file&&!show_success"/>
                 <input
                   type="file"
@@ -164,7 +164,7 @@ export default {
         this.uploaded_image = response.data;
         this.uploading = false;
         this.image_file = null;
-        this.loadImageAnaylsis(this.uploaded_image.id);
+        this.loadImageAnalysis(this.uploaded_image.id);
         this.show_success = true;
         this.image_url = "";
         this.mainStore.loading = false;
@@ -177,7 +177,7 @@ export default {
         
       }
     },
-    async loadImageAnaylsis(image_id) {
+    async loadImageAnalysis(image_id) {
       let response = await axios.get(
         "https://api.thecatapi.com/v1/images/" + image_id + "/analysis"
       ); // Ask for 1 Image, at full resolution
@@ -191,6 +191,7 @@ export default {
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap");
+@import url("../css/theme-light.css");
 .modal {
   /* display: block;
   opacity: 0.8; */
@@ -213,25 +214,26 @@ export default {
 
 .row {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
+  padding-right: 10px;
 }
 
 .left {
   width: 47%;
 }
 
-.right {
-  width: 49%;
-  background-color: #f8f8f7 !important;
+._right {
+  width: 53%;
   border-color: transparent;
   min-height: 93vh;
   height:auto;
   border-radius: 20px;
-  margin: 20px;
+  margin: 20px 30px;
   display: flex;
   align-items: center;
   flex-direction: column;
+  padding-bottom: 10px;
 }
 
 div.block {
@@ -246,7 +248,6 @@ button.close-button {
   height: 30px;
   background-image: url("../assets/close.svg");
   background-repeat: no-repeat;
-  background-color: #fff;
   background-position: center;
   border-color: transparent;
   border-radius: 10px;
@@ -256,7 +257,6 @@ button.close-button {
   font-family: "Jost";
   font-style: normal;
   font-weight: 500;
-  color: #1d1d1d;
   font-size: 26px;
 }
 
@@ -279,10 +279,8 @@ a.upload-guidelines {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px dashed #fbe0dc;
-  background-color: #fff;
   border-radius: 20px;
-  background-image: url("../assets/image-upload.svg");
+  /* background-image: url("../assets/image-upload-dark.svg"); */
   background-position: center;
   background-repeat: no-repeat;
 }
@@ -324,7 +322,6 @@ a.upload-guidelines {
 }
 
 span.upload-text {
-  color: #1d1d1d;
   font-size: 18px;
 }
 
@@ -355,7 +352,6 @@ span.upload-text {
   font-weight: 500;
   width: 100%;
   border-radius:10px;
-  background-color: #fff;
   padding: 15px;
 }
 

@@ -11,8 +11,8 @@ export default {
 </script>
 
 <style scoped>
+@import url("../css/theme-light.css");
 .right-part {
-  background-color: #fbe0dc;
   border-radius: 20px;
   height: 95vh;
   width:100%;

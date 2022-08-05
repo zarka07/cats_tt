@@ -9,9 +9,11 @@
       />
       <div class="search-submit"></div>
     </form>
-    <button class="links smile-button" type="button" @click="toLikes()"></button>
-    <button class="links heart-button" type="button" @click="toFav()"></button>
-    <button class="links nosmile-button" type="button" @click="toDislikes()"></button>
+    <div class="btn-group">
+      <button class="links smile-button" type="button" @click="toLikes()"></button>
+      <button class="links heart-button" type="button" @click="toFav()"></button>
+      <button class="links nosmile-button" type="button" @click="toDislikes()"></button>
+    </div>
   </div>
 </template>
 
@@ -19,7 +21,7 @@
 export default {
   name: "search-panel",
   props: ["show"],
-  emits: ['search'],
+  emits: ["search"],
   data() {
     return {
       search: "",
@@ -38,7 +40,7 @@ export default {
   },
   watch: {
     search() {
-      this.$emit('search',this.search)
+      this.$emit("search", this.search);
     },
   },
 };
@@ -46,4 +48,5 @@ export default {
 
 <style scoped>
 @import url("../css/search-panel-with-icons.css");
+@import url("../css/theme-light.css");
 </style>

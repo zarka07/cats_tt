@@ -1,0 +1,177 @@
+:root {
+    --text-color: #1D1D1D;
+    --bgc: #f8f8f7;
+    --bgcw: #FFF;
+    --bgcp: #fbe0dc;
+    --bgcrp:#fbe0dc;
+    --bgcg:#f8f8f7;
+    --bgct:#FFF;
+    --bgci:#FFF;
+    --bgcd:#FFF;
+    --bgctn:#ff868e;
+    --bgcs:#f8f8f7;
+    --bgcbn:#FFF;
+    --bgcm:#f8f8f7;
+    --img-upl:url("../assets/image-upload.svg");
+}
+
+:root[theme='dark'] {
+    --text-color: #FFF;
+    --bgc: #1D1D1D;
+    --bgcw: #ffffff0d;
+    --bgcp: #ff868e33;
+    --bgcrp:#ffffff0d;
+    --bgcg:#ffffff0d;
+    --bgct:#1D1D1D;
+    --bgci:#ffffff0d;
+    --bgcd:transparent;
+    --bgctn:#ff868e33;
+    --bgcs:#ffffff0d;
+    --bgcbn:#282828;
+    --bgcm:#282828;
+    --img-upl:url("../assets/image-upload-dark.svg");
+}
+
+#app {
+    background-color: var(--bgc);
+}
+
+.right-part {
+    background-color: var(--bgcrp);
+}
+
+.logo-name {
+    color: var(--text-color);
+}
+
+.hi{
+    color:var(--text-color)
+}
+
+.lets-start {
+    color: var(--text-color);
+}
+
+button.api-button {
+    background-color: var(--bgcw);
+}
+
+button.back-button {
+    background-color: var(--bgcp);
+}
+
+input[type="text"]{
+    background-color: var(--bgci);
+    color:var(--text-color);
+}
+
+.search-submit {
+    background-color: var(--bgcp);
+}
+
+button.links{
+    background-color: var(--bgcw);
+}
+
+.content-row,._content-row{
+    background-color: var(--bgcw);
+}
+
+button.back-button{
+    background-color: var(--bgcp);
+}
+
+button._back-button{
+    background-color: var(--bgcp);
+}
+
+.user-action{
+    background: var(--bgcg)
+}
+
+.action-time {
+    background-color: var(--bgct);
+}
+
+select{
+    background-color: var(--bgcg);
+}
+
+div.tab-name {
+    
+    background-color: var(--bgctn);
+}
+
+.breed-name{
+  background-color: var(--bgcp);
+}
+
+.current-breed-description{
+    border: 2px solid var(--bgcp);
+}
+
+h4.description-breed-name{
+    background-color: var(--bgcd);
+    color: var(--text-color);
+}
+
+b{
+    color: var(--text-color);
+}
+
+button.sort{
+    color:var(--text-color);
+    background-color: var(--bgcs);
+}
+
+.__text, ._text{
+    background-color: var(--bgcbn);
+}
+
+button.upload-button{
+    background-color: var(--bgcp);
+}
+
+.filters{
+    background-color: var(--bgcs);
+}
+
+select, button.reload-button{
+    background-color: var(--bgct);
+    color:var(--text-color)
+}
+
+._right{
+    background-color: var(--bgcm);
+}
+
+.upload-text{
+    color:var(--text-color);
+}
+
+button.close-button{
+    background-color: var(--bgci);
+}
+
+.upload-container{
+    border: 2px dashed var(--bgcp);
+    background-color: var(--bgci);
+    background-image: var(--img-upl);
+}
+
+span.upload-text{
+    color: var(--text-color);
+}
+
+.upload-success{
+    background-color: var(--bgci);
+}
+
+.upload-success-text{
+    color:var(--text-color);
+}
+
+.unset, .noFavorites{
+    background-color: var(--bgcs);
+}
+

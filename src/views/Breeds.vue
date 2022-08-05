@@ -15,14 +15,14 @@
             name="Breeds"
             id="breeds"
           >
-            <option value="" disabled selected>All Breeds:</option>
+            <option disabled selected>All Breeds:</option>
             <option v-for="item in breeds" :key="item" :value="item">
               {{ item.name }}
             </option>
           </select>
         </form>
 
-        <form style="width: 8vw; margin-left: 5px">
+        <form style="width: 8vw;">
           <select
             class="selectBreed"
             aria-label="Select limit"
@@ -291,13 +291,14 @@ export default {
 @import url("../css/manosry-wall.css");
 @import url("../css/pagination.css");
 @import url("../css/tabs.css");
+@import url("../css/theme-light.css");
 
 div.tab-name {
   margin-left: 0 !important;
 }
 
 .current-tab {
-  justify-content: space-between;
+  justify-content: space-between!important;
 }
 
 select {
@@ -312,7 +313,6 @@ select {
   font-weight: 400;
   font-size: 13px;
   color: #8c8c8c;
-  background-color: #f8f8f7;
 }
 
 button.sort {
@@ -350,6 +350,8 @@ button.sort-down:hover {
 .current-breed-tab {
   display: flex;
   justify-content: flex-start;
+  flex-wrap:wrap;
+  gap:10px;
 }
 
 .selected-breed-image {
@@ -362,7 +364,6 @@ button.sort-down:hover {
 
 .breed-name {
   text-align: center;
-  background-color: #fbe0dc;
   border-radius: 10px;
   height: 30px;
   width: 140px;
@@ -373,11 +374,9 @@ button.sort-down:hover {
   font-family: "Jost", sans-serif;
   font-weight: 500;
   font-size: 15px;
-  margin-left: 10px;
 }
 
 .breed-id {
-  margin-left: 10px;
   text-align: center;
   background-color: #ff868e;
   border-radius: 10px;
@@ -401,19 +400,16 @@ button.sort-down:hover {
   margin-top: 30px;
   margin-bottom: 30px;
   border-radius: 10px;
-  border: 2px solid #fbe0dc;
   font-family: "Jost", sans-serif;
   font-weight: 500;
   position: relative;
 }
 
 h4.description-breed-name {
-  position: absolute;
-  left: 22%;
-  top: -18px;
-  background-color: #fff;
   border: 2px solid transparent;
-  width: 300px;
+  margin-top: -18px;
+  margin-left: 5vw;
+  margin-right: 5vw;
 }
 
 h6.description-breed-country {
@@ -455,7 +451,6 @@ span {
 }
 
 .__text {
-  background-color: #fff;
   border-radius: 10px;
   min-height: 30px;
   height: auto;

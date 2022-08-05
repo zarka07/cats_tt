@@ -260,9 +260,6 @@ export default {
     },
   },
   watch: {
-    // search() {
-    //   this.setPages();
-    // },
     galleryCurrentPage() {
       this.prevPageDisabled = this.galleryCurrentPage == 1 ? true : false;
       this.nextPageDisabled = this.galleryCurrentPage < this.pages.length ? false : true;
@@ -280,6 +277,7 @@ export default {
 @import url("../css/manosry-wall.css");
 @import url("../css/pagination.css");
 @import url("../css/tabs.css");
+@import url("../css/theme-light.css");
 
 div.tab-name {
   margin-left: 10px;
@@ -287,7 +285,6 @@ div.tab-name {
 
 button.upload-button {
   margin-left: auto;
-  background-color: #fbe0dc;
   color: #ff868e;
   border-radius: 10px;
   border-color: transparent;
@@ -311,7 +308,6 @@ button.upload-button:hover {
 }
 
 .filters {
-  background-color: #f8f8f7;
   border-radius: 10px;
   border-color: transparent;
   width: 100%;
@@ -381,8 +377,6 @@ select {
   font-family: "Jost", sans-serif;
   font-weight: 400;
   font-size: 13px;
-  color: #1d1d1d;
-  background-color: #fff;
 }
 
 #limit {
@@ -402,7 +396,6 @@ button.reload-button {
   height: 30px;
   background-image: url("../assets/reload.svg");
   background-repeat: no-repeat;
-  background-color: #fff;
   background-position: center;
   border-color: transparent;
   border-radius: 10px;

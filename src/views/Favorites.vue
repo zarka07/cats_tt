@@ -1,11 +1,11 @@
 <template>
   <search-panel :show="showSearch" @search="this.search = $event"></search-panel>
-  <div class="content-row">
+  <div class="_content-row">
     <Loader v-if="this.mainStore.loading" />
-    <div class="current-content" v-else>
-      <div class="current-tab">
-        <button type="submit" class="back-button" value="" @click="goBack()"></button>
-        <div class="tab-name"><span>FAVORITES</span></div>
+    <div class="_current-content" v-else>
+      <div class="_current-tab">
+        <button type="submit" class="_back-button" value="" @click="goBack()"></button>
+        <div class="_tab-name"><span>FAVORITES</span></div>
       </div>
 
       <div class="wall" v-if="this.mainStore.favorites.length != 0">
@@ -85,7 +85,6 @@ export default {
   align-items: center;
   width: 100%;
   height: 40px;
-  background-color: #f8f8f7;
   color: #8c8c8c;
   font-family: "Jost", sans-serif;
   font-weight: 400;
